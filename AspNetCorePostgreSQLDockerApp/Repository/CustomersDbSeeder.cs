@@ -1,17 +1,17 @@
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 using AspNetCorePostgreSQLDockerApp.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace AspNetCorePostgreSQLDockerApp.Repository
 {
     public class CustomersDbSeeder
     {
-        readonly ILogger _logger;
+        private readonly ILogger _logger;
 
         public CustomersDbSeeder(ILoggerFactory loggerFactory)
         {
@@ -25,11 +25,8 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
             {
                 var customersDb = serviceScope.ServiceProvider.GetService<CustomersDbContext>();
                 if (await customersDb.Database.EnsureCreatedAsync())
-                {
-                    if (!await customersDb.Customers.AnyAsync()) {
-                      await InsertCustomersSampleData(customersDb);
-                    }
-                }
+                    if (!await customersDb.Customers.AnyAsync())
+                        await InsertCustomersSampleData(customersDb);
             }
         }
 
@@ -42,9 +39,9 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
                 await db.SaveChangesAsync();
             }
             catch (Exception exp)
-            {                
+            {
                 _logger.LogError($"Error in {nameof(CustomersDbSeeder)}: " + exp.Message);
-                throw; 
+                throw;
             }
 
             var customers = GetCustomers(states);
@@ -52,19 +49,19 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
 
             try
             {
-              await db.SaveChangesAsync();
+                await db.SaveChangesAsync();
             }
             catch (Exception exp)
             {
-              _logger.LogError($"Error in {nameof(CustomersDbSeeder)}: " + exp.Message);
-              throw;
+                _logger.LogError($"Error in {nameof(CustomersDbSeeder)}: " + exp.Message);
+                throw;
             }
-
         }
 
-        private List<Customer> GetCustomers(List<State> states) {
+        private List<Customer> GetCustomers(List<State> states)
+        {
             //Customers
-            var customerNames = new string[]
+            var customerNames = new[]
             {
                 "Marcus,HighTower,Male,acmecorp.com",
                 "Jesse,Smith,Female,gmail.com",
@@ -91,7 +88,7 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
                 "Elaine,Jones,Female,yahoo.com",
                 "John,Papa,Male,gmail.com"
             };
-            var addresses = new string[]
+            var addresses = new[]
             {
                 "1234 Anywhere St.",
                 "435 Main St.",
@@ -119,7 +116,7 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
                 "899 Mickey Way"
             };
 
-            var citiesStates = new string[]
+            var citiesStates = new[]
             {
                 "Phoenix,AZ,Arizona",
                 "Encinitas,CA,California",
@@ -147,10 +144,11 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
                 "Orlando,FL,Florida"
             };
 
-            var citiesIds = new int[] {5, 9, 44, 5, 36, 17, 16, 9, 36, 14, 14, 6, 9, 24, 44, 36, 25, 19, 5, 14, 5, 23, 38, 17};
+            var citiesIds = new[]
+                { 5, 9, 44, 5, 36, 17, 16, 9, 36, 14, 14, 6, 9, 24, 44, 36, 25, 19, 5, 14, 5, 23, 38, 17 };
             var zip = 85229;
 
-            var orders = new List<Order> 
+            var orders = new List<Order>
             {
                 new Order { Product = "Basket", Price = 29.99M, Quantity = 1 },
                 new Order { Product = "Yarn", Price = 9.99M, Quantity = 1 },
@@ -173,12 +171,14 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
             var customers = new List<Customer>();
             var random = new Random();
 
-            for (var i = 0; i < customerNames.Length; i++) {
+            for (var i = 0; i < customerNames.Length; i++)
+            {
                 var nameGenderHost = customerNames[i].Split(',');
                 var cityState = citiesStates[i].Split(',');
                 var state = states.Where(s => s.Abbreviation == cityState[1]).SingleOrDefault();
 
-                var customer = new Customer {
+                var customer = new Customer
+                {
                     FirstName = nameGenderHost[0],
                     LastName = nameGenderHost[1],
                     Email = nameGenderHost[0] + '.' + nameGenderHost[1] + '@' + nameGenderHost[3],
@@ -193,7 +193,8 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
                 firstOrder = (int)Math.Floor(random.NextDouble() * orders.Count);
                 lastOrder = (int)Math.Floor(random.NextDouble() * orders.Count);
 
-                if (firstOrder > lastOrder) {
+                if (firstOrder > lastOrder)
+                {
                     tempOrder = firstOrder;
                     firstOrder = lastOrder;
                     lastOrder = tempOrder;
@@ -201,14 +202,17 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
 
                 customer.Orders = new List<Order>();
 
-                for (var j = firstOrder; j <= lastOrder && j < ordersLength; j++) {
-                    var order = new Order {
+                for (var j = firstOrder; j <= lastOrder && j < ordersLength; j++)
+                {
+                    var order = new Order
+                    {
                         Product = orders[j].Product,
                         Price = orders[j].Price,
                         Quantity = orders[j].Quantity
                     };
                     customer.Orders.Add(order);
                 }
+
                 customer.OrderCount = customer.Orders.Count;
                 customers.Add(customer);
             }
@@ -216,8 +220,9 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
             return customers;
         }
 
-        private List<State> GetStates() {
-            var states = new List<State> 
+        private List<State> GetStates()
+        {
+            var states = new List<State>
             {
                 new State { Name = "Alabama", Abbreviation = "AL" },
                 new State { Name = "Montana", Abbreviation = "MT" },

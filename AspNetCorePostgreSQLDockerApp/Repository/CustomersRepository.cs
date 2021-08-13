@@ -1,23 +1,22 @@
 using System;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
-using Microsoft.Extensions.Logging;
 using AspNetCorePostgreSQLDockerApp.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace AspNetCorePostgreSQLDockerApp.Repository
 {
     public class CustomersRepository : ICustomersRepository
     {
-
         private readonly CustomersDbContext _context;
         private readonly ILogger _logger;
 
-        public CustomersRepository(CustomersDbContext context, ILoggerFactory loggerFactory) {
-          _context = context;
-          _logger = loggerFactory.CreateLogger("CustomersRepository");
+        public CustomersRepository(CustomersDbContext context, ILoggerFactory loggerFactory)
+        {
+            _context = context;
+            _logger = loggerFactory.CreateLogger("CustomersRepository");
         }
 
         public async Task<List<Customer>> GetCustomersAsync()
@@ -40,11 +39,11 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
             _context.Add(customer);
             try
             {
-              await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
-            catch (System.Exception exp)
+            catch (Exception exp)
             {
-               _logger.LogError($"Error in {nameof(InsertCustomerAsync)}: " + exp.Message);
+                _logger.LogError($"Error in {nameof(InsertCustomerAsync)}: " + exp.Message);
             }
 
             return customer;
@@ -57,12 +56,13 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
             _context.Entry(customer).State = EntityState.Modified;
             try
             {
-              return (await _context.SaveChangesAsync() > 0 ? true : false);
+                return await _context.SaveChangesAsync() > 0 ? true : false;
             }
             catch (Exception exp)
             {
-               _logger.LogError($"Error in {nameof(UpdateCustomerAsync)}: " + exp.Message);
+                _logger.LogError($"Error in {nameof(UpdateCustomerAsync)}: " + exp.Message);
             }
+
             return false;
         }
 
@@ -73,14 +73,14 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
             _context.Remove(customer);
             try
             {
-              return (await _context.SaveChangesAsync() > 0 ? true : false);
+                return await _context.SaveChangesAsync() > 0 ? true : false;
             }
-            catch (System.Exception exp)
+            catch (Exception exp)
             {
-               _logger.LogError($"Error in {nameof(DeleteCustomerAsync)}: " + exp.Message);
+                _logger.LogError($"Error in {nameof(DeleteCustomerAsync)}: " + exp.Message);
             }
+
             return false;
         }
-
     }
 }

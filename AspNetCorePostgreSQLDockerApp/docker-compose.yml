@@ -9,9 +9,13 @@ services:
       context: .
       dockerfile: aspnetcore.dockerfile
     ports:
-     - "5000:5000"
+      - "5000:5000"
     depends_on:
-     - "postgres"
+      - "postgres"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "Data:DbContext:DockerCommandsConnectionString=User ID=postgres;Password=password;Server=postgres;Port=5432;Database=DockerCommands;Integrated Security=true;Pooling=true;"
+      - "Data:DbContext:CustomersConnectionString=User ID=postgres;Password=password;Server=postgres;Port=5432;Database=Customers;Integrated Security=true;Pooling=true;"
     networks:
       - aspnetcoreapp-network
 

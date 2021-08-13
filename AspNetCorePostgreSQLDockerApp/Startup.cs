@@ -1,17 +1,12 @@
 using System;
-using System.IO;
+using AspNetCorePostgreSQLDockerApp.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.OpenApi.Models;
-using AspNetCorePostgreSQLDockerApp.Repository;
 
 namespace AspNetCorePostgreSQLDockerApp
 {
@@ -27,7 +22,6 @@ namespace AspNetCorePostgreSQLDockerApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             //Add PostgreSQL support
             services.AddEntityFrameworkNpgsql()
                 .AddDbContext<DockerCommandsDbContext>(options =>
@@ -41,7 +35,7 @@ namespace AspNetCorePostgreSQLDockerApp
             // Add our PostgreSQL Repositories (scoped to each request)
             services.AddScoped<IDockerCommandsRepository, DockerCommandsRepository>();
             services.AddScoped<ICustomersRepository, CustomersRepository>();
-            
+
             //Transient: Created each time they're needed
             services.AddTransient<DockerCommandsDbSeeder>();
             services.AddTransient<CustomersDbSeeder>();
@@ -54,43 +48,35 @@ namespace AspNetCorePostgreSQLDockerApp
                     Title = "Application API",
                     Description = "Application Documentation",
                     Contact = new OpenApiContact { Name = "Author" },
-                    License = new OpenApiLicense { Name = "MIT", Url = new Uri("https://en.wikipedia.org/wiki/MIT_License") }
+                    License = new OpenApiLicense
+                        { Name = "MIT", Url = new Uri("https://en.wikipedia.org/wiki/MIT_License") }
                 });
 
                 // Add XML comment document by uncommenting the following
                 // var filePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "MyApi.xml");
                 // options.IncludeXmlComments(filePath);
-
             });
 
             services.AddCors(o => o.AddPolicy("AllowAllPolicy", options =>
             {
                 options.AllowAnyOrigin()
-                       .AllowAnyMethod()
-                       .AllowAnyHeader();
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
             }));
 
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "dist";
-            });
+            services.AddSpaStaticFiles(configuration => { configuration.RootPath = "dist"; });
 
             // services.AddRouting(options => options.LowercaseUrls = true);
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
-                              DockerCommandsDbSeeder dockerCommandsDbSeeder, CustomersDbSeeder customersDbSeeder)
+            DockerCommandsDbSeeder dockerCommandsDbSeeder, CustomersDbSeeder customersDbSeeder)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
             else
-            {
                 app.UseExceptionHandler("/Home/Error");
-            }
 
             app.UseCors("AllowAllPolicy");
 
@@ -102,10 +88,7 @@ namespace AspNetCorePostgreSQLDockerApp
 
             // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
             // Visit http://localhost:5000/swagger
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            });
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"); });
 
             app.UseRouting();
 
@@ -114,8 +97,8 @@ namespace AspNetCorePostgreSQLDockerApp
                 endpoints.MapControllers();
 
                 endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller}/{action}/{id?}");
+                    "default",
+                    "{controller}/{action}/{id?}");
 
                 // Handle redirecting client-side routes to Customers/Index route
                 endpoints.MapFallbackToController("Index", "Customers");
@@ -123,8 +106,6 @@ namespace AspNetCorePostgreSQLDockerApp
 
             customersDbSeeder.SeedAsync(app.ApplicationServices).Wait();
             dockerCommandsDbSeeder.SeedAsync(app.ApplicationServices).Wait();
-
         }
-
     }
 }

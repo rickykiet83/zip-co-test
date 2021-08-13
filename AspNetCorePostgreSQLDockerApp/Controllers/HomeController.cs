@@ -1,20 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-
 using AspNetCorePostgreSQLDockerApp.Repository;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCorePostgreSQLDockerApp.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IDockerCommandsRepository _repo;
 
-        IDockerCommandsRepository _repo;
-
-        public HomeController(IDockerCommandsRepository repo) {
-          _repo = repo;
+        public HomeController(IDockerCommandsRepository repo)
+        {
+            _repo = repo;
         }
 
         public async Task<IActionResult> Help()

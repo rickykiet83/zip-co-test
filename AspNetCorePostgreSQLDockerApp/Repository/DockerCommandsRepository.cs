@@ -1,11 +1,9 @@
 using System;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-
-using Microsoft.Extensions.Logging;
 using AspNetCorePostgreSQLDockerApp.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace AspNetCorePostgreSQLDockerApp.Repository
 {
@@ -14,23 +12,28 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
         private readonly DockerCommandsDbContext _context;
         private readonly ILogger _logger;
 
-        public DockerCommandsRepository(DockerCommandsDbContext context, ILoggerFactory loggerFactory) {
-          _context = context;
-          _logger = loggerFactory.CreateLogger("DockerCommandsRepository");
+        public DockerCommandsRepository(DockerCommandsDbContext context, ILoggerFactory loggerFactory)
+        {
+            _context = context;
+            _logger = loggerFactory.CreateLogger("DockerCommandsRepository");
         }
 
-        public async Task<List<DockerCommand>> GetDockerCommandsAsync() {
-          return await _context.DockerCommands.Include(dc => dc.Examples).ToListAsync();
+        public async Task<List<DockerCommand>> GetDockerCommandsAsync()
+        {
+            return await _context.DockerCommands.Include(dc => dc.Examples).ToListAsync();
         }
 
-        public async Task InsertDockerCommandAsync(DockerCommand command) {
-          _context.DockerCommands.Add(command);
-          try {
-            await _context.SaveChangesAsync();
-          }
-          catch (Exception exp) {
-            _logger.LogError($"Error in {nameof(InsertDockerCommandAsync)}: " + exp.Message);
-          }
+        public async Task InsertDockerCommandAsync(DockerCommand command)
+        {
+            _context.DockerCommands.Add(command);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception exp)
+            {
+                _logger.LogError($"Error in {nameof(InsertDockerCommandAsync)}: " + exp.Message);
+            }
         }
     }
 }

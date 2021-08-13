@@ -11,12 +11,12 @@ body {
 }
 
 .header-row {
-  background-color: #efefef;
+    background-color: #efefef;
 }
 
 .header-row div {
-  font-weight: bold;
-  margin: 10px 00px 10px 0px;
+    font-weight: bold;
+    margin: 10px 00px 10px 0px;
 }
 
 /* Set widths on the form inputs since otherwise they're 100% wide */
@@ -28,13 +28,13 @@ textarea,
 }
 
 .toolbar-item a {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 input.ng-invalid, select.ng-invalid {
-  border-left: 5px solid #a94442;
+    border-left: 5px solid #a94442;
 }
 
 input.ng-valid, select.ng-valid {
-  border-left: 5px solid #42A948;
+    border-left: 5px solid #42A948;
 }

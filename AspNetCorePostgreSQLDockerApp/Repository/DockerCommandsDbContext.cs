@@ -1,12 +1,14 @@
-using Microsoft.EntityFrameworkCore;
 using AspNetCorePostgreSQLDockerApp.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCorePostgreSQLDockerApp.Repository
 {
     public class DockerCommandsDbContext : DbContext
     {
-        public DbSet<DockerCommand> DockerCommands { get; set; }
+        public DockerCommandsDbContext(DbContextOptions<DockerCommandsDbContext> options) : base(options)
+        {
+        }
 
-        public DockerCommandsDbContext(DbContextOptions<DockerCommandsDbContext> options) : base(options) { }
+        public DbSet<DockerCommand> DockerCommands { get; set; }
     }
 }
