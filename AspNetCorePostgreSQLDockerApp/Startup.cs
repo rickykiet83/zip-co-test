@@ -2,6 +2,7 @@ using System;
 using AspNetCorePostgreSQLDockerApp.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -64,7 +65,7 @@ namespace AspNetCorePostgreSQLDockerApp
                     .AllowAnyHeader();
             }));
 
-            services.AddSpaStaticFiles(configuration => { configuration.RootPath = "dist"; });
+            services.AddSpaStaticFiles(configuration => { configuration.RootPath = "Client/dist"; });
 
             // services.AddRouting(options => options.LowercaseUrls = true);
         }
@@ -102,6 +103,19 @@ namespace AspNetCorePostgreSQLDockerApp
 
                 // Handle redirecting client-side routes to Customers/Index route
                 endpoints.MapFallbackToController("Index", "Customers");
+            });
+            
+            app.UseSpa(spa =>
+            {
+                // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                // see https://go.microsoft.com/fwlink/?linkid=864501
+
+                spa.Options.SourcePath = "Client";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4201");
+                }
             });
 
             customersDbSeeder.SeedAsync(app.ApplicationServices).Wait();

@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AspNetCorePostgreSQLDockerA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCorePostgreSQLDockerApp", "AspNetCorePostgreSQLDockerApp\AspNetCorePostgreSQLDockerApp.csproj", "{E32E1866-48E9-47FA-9DEF-3F91BC29C5C8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCorePostgreSQLDockerApp.UnitTest", "AspNetCorePostgreSQLDockerApp.UnitTest\AspNetCorePostgreSQLDockerApp.UnitTest.csproj", "{02575E89-6478-4470-871C-D844256280D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,11 +19,16 @@ Global
 		{E32E1866-48E9-47FA-9DEF-3F91BC29C5C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E32E1866-48E9-47FA-9DEF-3F91BC29C5C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E32E1866-48E9-47FA-9DEF-3F91BC29C5C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02575E89-6478-4470-871C-D844256280D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02575E89-6478-4470-871C-D844256280D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02575E89-6478-4470-871C-D844256280D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02575E89-6478-4470-871C-D844256280D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E32E1866-48E9-47FA-9DEF-3F91BC29C5C8} = {94FF9455-201B-452A-8262-AFB25D1CF615}
+		{02575E89-6478-4470-871C-D844256280D9} = {94FF9455-201B-452A-8262-AFB25D1CF615}
 	EndGlobalSection
 EndGlobal
