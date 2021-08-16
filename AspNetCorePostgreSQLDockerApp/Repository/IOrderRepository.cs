@@ -8,5 +8,7 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
     {
         Task<IEnumerable<Order>> GetOrdersAsync(int customerId, bool trackChanges = false);
         Task<Order> InsertOrderAsync(Order order);
+        Task<Order> CancelOrderAsync(Order order);
+        Task<Order> UpdateOrderAsync(Order order);
     }
 }
