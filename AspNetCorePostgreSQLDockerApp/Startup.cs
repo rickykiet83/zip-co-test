@@ -1,6 +1,10 @@
 using System;
+using System.Reflection;
+using System.Text.Json.Serialization;
 using AspNetCorePostgreSQLDockerApp.Repository;
 using Microsoft.AspNetCore.Builder;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +23,7 @@ namespace AspNetCorePostgreSQLDockerApp
         }
 
         public IConfiguration Configuration { get; set; }
+        public ILifetimeScope AutofacContainer { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -28,19 +33,21 @@ namespace AspNetCorePostgreSQLDockerApp
                 .AddDbContext<DockerCommandsDbContext>(options =>
                     options.UseNpgsql(Configuration["Data:DbContext:DockerCommandsConnectionString"]))
                 .AddDbContext<CustomersDbContext>(options =>
-                    options.UseNpgsql(Configuration["Data:DbContext:CustomersConnectionString"]));
+                    options.UseNpgsql(Configuration["Data:DbContext:CustomersConnectionString"])
+                        .EnableSensitiveDataLogging()
+                        .EnableDetailedErrors());
 
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddJsonOptions(opts =>
+            {
+                var enumConverter = new JsonStringEnumConverter();
+                opts.JsonSerializerOptions.Converters.Add(enumConverter);
+            });
 
             // Add our PostgreSQL Repositories (scoped to each request)
-            services.AddScoped<IDockerCommandsRepository, DockerCommandsRepository>();
-            services.AddScoped<ICustomersRepository, CustomersRepository>();
-            services.AddScoped<IStateRepository, StateRepository>();
-            services.AddScoped<IOrderRepository, OrderRepository>();
-            services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
-
+            // services.AddScoped<IDockerCommandsRepository, DockerCommandsRepository>();
+           
             //Transient: Created each time they're needed
             services.AddTransient(typeof(IUnitOfWork), typeof(UnitOfWork));
             services.AddTransient<DockerCommandsDbSeeder>();
@@ -72,13 +79,23 @@ namespace AspNetCorePostgreSQLDockerApp
 
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "Client/dist"; });
 
-            // services.AddRouting(options => options.LowercaseUrls = true);
+            services.AddRouting(options => options.LowercaseUrls = true);
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            var asm = Assembly.GetExecutingAssembly();
+
+            builder.RegisterAssemblyTypes(asm)
+                .Where(t => t.Name.EndsWith("Repository", StringComparison.InvariantCulture))
+                .AsImplementedInterfaces();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
             DockerCommandsDbSeeder dockerCommandsDbSeeder, CustomersDbSeeder customersDbSeeder)
         {
+            AutofacContainer = app.ApplicationServices.GetAutofacRoot();
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
             else
@@ -119,7 +136,7 @@ namespace AspNetCorePostgreSQLDockerApp
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4201");
+                    spa.UseAngularCliServer("start");
                 }
             });
 
