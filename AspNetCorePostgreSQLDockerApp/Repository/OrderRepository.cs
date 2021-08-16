@@ -42,15 +42,30 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
         public async Task<Order> CancelOrderAsync(Order order)
         {
             order.Status = EOrderStatus.Cancelled;
-            Update(order);
-            await SaveAsync();
+            try
+            {
+                await UpdateOrderAsync(order);
+            }
+            catch (Exception exp)
+            {
+                _logger.LogError($"Error in {nameof(CancelOrderAsync)}: " + exp.Message);
+            }
+            
             return order;
         }
 
         public async Task<Order> UpdateOrderAsync(Order order)
         {
-            Update(order);
-            await SaveAsync();
+            try
+            {
+                Update(order);
+                await SaveAsync();
+            }
+            catch (Exception exp)
+            {
+                _logger.LogError($"Error in {nameof(UpdateOrderAsync)}: " + exp.Message);
+            }
+            
             return order;
         }
     }
