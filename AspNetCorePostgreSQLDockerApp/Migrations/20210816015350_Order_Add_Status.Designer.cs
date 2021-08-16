@@ -3,15 +3,17 @@ using System;
 using AspNetCorePostgreSQLDockerApp.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace AspNetCorePostgreSQLDockerApp.Migrations
 {
     [DbContext(typeof(CustomersDbContext))]
-    partial class CustomersDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210816015350_Order_Add_Status")]
+    partial class Order_Add_Status
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
