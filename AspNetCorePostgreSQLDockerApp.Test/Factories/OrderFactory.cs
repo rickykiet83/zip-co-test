@@ -2,7 +2,7 @@ using System;
 using AspNetCorePostgreSQLDockerApp.Dtos;
 using Bogus;
 
-namespace AspNetCorePostgreSQLDockerApp.UnitTest.Factories
+namespace AspNetCorePostgreSQLDockerApp.Test.Factories
 {
     public class OrderFactory
     {

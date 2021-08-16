@@ -32,6 +32,6 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
 
         public void Delete(T entity) => _dbContext.Set<T>().Remove(entity);
         
-        public async Task SaveAsync() => _dbContext.SaveChangesAsync();
+        public async Task<int> SaveAsync() => await _dbContext.SaveChangesAsync();
     }
 }

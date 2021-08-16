@@ -37,6 +37,9 @@ namespace AspNetCorePostgreSQLDockerApp
             // Add our PostgreSQL Repositories (scoped to each request)
             services.AddScoped<IDockerCommandsRepository, DockerCommandsRepository>();
             services.AddScoped<ICustomersRepository, CustomersRepository>();
+            services.AddScoped<IStateRepository, StateRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
 
             //Transient: Created each time they're needed
             services.AddTransient<DockerCommandsDbSeeder>();

@@ -8,38 +8,42 @@ using Microsoft.Extensions.Logging;
 
 namespace AspNetCorePostgreSQLDockerApp.Repository
 {
-    public class CustomersRepository : ICustomersRepository
+    public class CustomersRepository : RepositoryBase<Customer>, ICustomersRepository
     {
-        private readonly CustomersDbContext _context;
         private readonly ILogger _logger;
+        private readonly IStateRepository _stateRepository;
 
-        public CustomersRepository(CustomersDbContext context, ILoggerFactory loggerFactory)
+        public CustomersRepository(CustomersDbContext context, ILoggerFactory loggerFactory, IStateRepository stateRepository) : base(context)
         {
-            _context = context;
+            _stateRepository = stateRepository;
             _logger = loggerFactory.CreateLogger("CustomersRepository");
         }
 
-        public async Task<List<Customer>> GetCustomersAsync()
+        public async Task<List<Customer>> GetCustomersAsync(bool trackChanges = false)
         {
-            return await _context.Customers.OrderBy(c => c.LastName).ToListAsync();
+            return await FindAll(trackChanges)
+                .OrderBy(c => c.LastName)
+                .ToListAsync();
         }
 
-        public async Task<Customer> GetCustomerAsync(int id)
+        public async Task<Customer> GetCustomerAsync(int id, bool trackChanges = false)
         {
-            return await _context.Customers.SingleOrDefaultAsync(c => c.Id == id);
+            return await FindByCondition(c => c.Id.Equals(id), trackChanges).SingleOrDefaultAsync();
         }
 
-        public async Task<List<State>> GetStatesAsync()
+        public async Task<List<State>> GetStatesAsync(bool trackChanges = false)
         {
-            return await _context.States.OrderBy(s => s.Abbreviation).ToListAsync();
+            return await _stateRepository.FindAll(trackChanges)
+                .OrderBy(s => s.Abbreviation)
+                .ToListAsync();
         }
 
         public async Task<Customer> InsertCustomerAsync(Customer customer)
         {
-            _context.Add(customer);
+            Create(customer);
             try
             {
-                await _context.SaveChangesAsync();
+                await SaveAsync();
             }
             catch (Exception exp)
             {
@@ -52,11 +56,10 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
         public async Task<bool> UpdateCustomerAsync(Customer customer)
         {
             //Will update all properties of the Customer
-            _context.Customers.Attach(customer);
-            _context.Entry(customer).State = EntityState.Modified;
+            Update(customer);
             try
             {
-                return await _context.SaveChangesAsync() > 0 ? true : false;
+                return await SaveAsync() > 0;
             }
             catch (Exception exp)
             {
@@ -69,11 +72,11 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
         public async Task<bool> DeleteCustomerAsync(int id)
         {
             //Extra hop to the database but keeps it nice and simple for this demo
-            var customer = await _context.Customers.SingleOrDefaultAsync(c => c.Id == id);
-            _context.Remove(customer);
+            var customer = await GetCustomerAsync(id);
+            Delete(customer);
             try
             {
-                return await _context.SaveChangesAsync() > 0 ? true : false;
+                return await SaveAsync() > 0;
             }
             catch (Exception exp)
             {
