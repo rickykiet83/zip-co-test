@@ -30,6 +30,7 @@ namespace AspNetCorePostgreSQLDockerApp
                 .AddDbContext<CustomersDbContext>(options =>
                     options.UseNpgsql(Configuration["Data:DbContext:CustomersConnectionString"]));
 
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddControllersWithViews();
 

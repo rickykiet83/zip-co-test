@@ -26,8 +26,4 @@
       <ProjectReference Include="..\AspNetCorePostgreSQLDockerApp\AspNetCorePostgreSQLDockerApp.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Factories" />
-    </ItemGroup>
-
 </Project>
