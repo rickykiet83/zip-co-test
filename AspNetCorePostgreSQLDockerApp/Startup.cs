@@ -42,6 +42,7 @@ namespace AspNetCorePostgreSQLDockerApp
             services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
 
             //Transient: Created each time they're needed
+            services.AddTransient(typeof(IUnitOfWork), typeof(UnitOfWork));
             services.AddTransient<DockerCommandsDbSeeder>();
             services.AddTransient<CustomersDbSeeder>();
 

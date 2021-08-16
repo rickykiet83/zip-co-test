@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCorePostgreSQLDockerApp.Repository
 {
-    public class RepositoryBase<T> : IRepositoryBase<T> where T: class
+    public class RepositoryBase<T> : IRepositoryBase<T>, IDisposable where T: class
     {
         private readonly CustomersDbContext _dbContext;
         
@@ -15,10 +15,10 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
             _dbContext = dbContext;
         }
         
-        public IQueryable<T> FindAll(bool trackChanges) =>
+        public IQueryable<T> FindAll(bool trackChanges = false) =>
             !trackChanges ? _dbContext.Set<T>().AsNoTracking() : _dbContext.Set<T>();
 
-        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges) =>
+        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges = false) =>
             !trackChanges
                 ? _dbContext.Set<T>()
                     .Where(expression)
@@ -33,5 +33,10 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
         public void Delete(T entity) => _dbContext.Set<T>().Remove(entity);
         
         public async Task<int> SaveAsync() => await _dbContext.SaveChangesAsync();
+
+        public void Dispose()
+        {
+            _dbContext?.Dispose();
+        }
     }
 }
