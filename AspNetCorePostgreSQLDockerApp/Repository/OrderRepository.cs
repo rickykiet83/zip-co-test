@@ -26,9 +26,9 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
 
         public async Task<Order> InsertOrderAsync(Order order)
         {
-            Create(order);
             try
             {
+                Create(order);
                 await SaveAsync();
             }
             catch (Exception exp)
@@ -41,9 +41,9 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
 
         public async Task<Order> CancelOrderAsync(Order order)
         {
-            order.Status = EOrderStatus.Cancelled;
             try
             {
+                order.Status = EOrderStatus.Cancelled;
                 await UpdateOrderAsync(order);
             }
             catch (Exception exp)

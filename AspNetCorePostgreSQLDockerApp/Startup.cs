@@ -2,9 +2,11 @@ using System;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using AspNetCorePostgreSQLDockerApp.Repository;
+using AspNetCorePostgreSQLDockerApp.Validations;
 using Microsoft.AspNetCore.Builder;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
@@ -43,7 +45,8 @@ namespace AspNetCorePostgreSQLDockerApp
             {
                 var enumConverter = new JsonStringEnumConverter();
                 opts.JsonSerializerOptions.Converters.Add(enumConverter);
-            });
+            }).AddFluentValidation(fv =>
+                fv.RegisterValidatorsFromAssemblyContaining<OrderCreateValidator>());;
 
             // Add our PostgreSQL Repositories (scoped to each request)
             // services.AddScoped<IDockerCommandsRepository, DockerCommandsRepository>();
@@ -60,7 +63,12 @@ namespace AspNetCorePostgreSQLDockerApp
                     Version = "v1",
                     Title = "Application API",
                     Description = "Application Documentation",
-                    Contact = new OpenApiContact { Name = "Author" },
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Kiet Pham", 
+                        Email = "kietpham.dev@gmail.com", 
+                        Url = new Uri("https://www.linkedin.com/in/kiet-pham-a1260b77/")
+                    },
                     License = new OpenApiLicense
                         { Name = "MIT", Url = new Uri("https://en.wikipedia.org/wiki/MIT_License") }
                 });
