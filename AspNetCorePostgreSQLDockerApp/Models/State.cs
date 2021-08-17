@@ -1,8 +1,9 @@
+using AspNetCorePostgreSQLDockerApp.Models.Abstract;
+
 namespace AspNetCorePostgreSQLDockerApp.Models
 {
-    public class State
+    public class State : DomainEntity<int>
     {
-        public int Id { get; set; }
         public string Abbreviation { get; set; }
         public string Name { get; set; }
     }

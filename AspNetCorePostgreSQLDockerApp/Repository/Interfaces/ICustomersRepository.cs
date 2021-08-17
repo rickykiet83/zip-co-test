@@ -4,7 +4,7 @@ using AspNetCorePostgreSQLDockerApp.Models;
 
 namespace AspNetCorePostgreSQLDockerApp.Repository
 {
-    public interface ICustomersRepository : IRepositoryBase<Customer>
+    public interface ICustomersRepository : IRepositoryBase<Customer, int>
     {
         Task<List<Customer>> GetCustomersAsync(bool trackChanges = false);
 

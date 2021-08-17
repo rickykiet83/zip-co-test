@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AspNetCorePostgreSQLDockerApp.Repository
 {
-    public class OrderRepository : RepositoryBase<Order>, IOrderRepository
+    public class OrderRepository : RepositoryBase<Order, int>, IOrderRepository
     {
         private readonly ILogger _logger;
         public OrderRepository(CustomersDbContext context, ILoggerFactory loggerFactory) : base(context)
@@ -35,7 +35,6 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
                 resultOrders.Add(order);
             }
 
-            await SaveAsync();
             return resultOrders;
         }
 
@@ -56,7 +55,7 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
 
         public async Task<Order> GetOrderAsync(int orderId, bool trackChanges = false)
         {
-            return await FindByCondition(o => o.Id.Equals(orderId), false).SingleOrDefaultAsync();
+            return await FindByIdAsync(orderId);
         }
 
         public async Task<Order> UpdateOrderAsync(Order order)
@@ -64,7 +63,6 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
             try
             {
                 Update(order);
-                await SaveAsync();
             }
             catch (Exception exp)
             {

@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AspNetCorePostgreSQLDockerApp.Repository
 {
-    public class CustomersRepository : RepositoryBase<Customer>, ICustomersRepository
+    public class CustomersRepository : RepositoryBase<Customer, int>, ICustomersRepository
     {
         private readonly ILogger _logger;
         private readonly IStateRepository _stateRepository;
@@ -28,7 +28,7 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
 
         public async Task<Customer> GetCustomerAsync(int id, bool trackChanges = false)
         {
-            return await FindByCondition(c => c.Id.Equals(id), trackChanges).SingleOrDefaultAsync();
+            return await FindByIdAsync(id);
         }
 
         public async Task<List<State>> GetStatesAsync(bool trackChanges = false)

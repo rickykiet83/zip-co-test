@@ -41,6 +41,7 @@ namespace AspNetCorePostgreSQLDockerApp.Services
         public async Task<IEnumerable<OrderDto>> CreateOrdersAsync(int customerId, List<Order> orders)
         {
             var addedOrders = await _orderRepository.CreateOrdersAsync(customerId, orders);
+            await SaveAsync();
             var result = _mapper.Map<IEnumerable<OrderDto>>(addedOrders);
             
             return result;
@@ -52,6 +53,7 @@ namespace AspNetCorePostgreSQLDockerApp.Services
             if (order == null) return null;
             
             var canceledOrder = await _orderRepository.CancelOrderAsync(order);
+            await SaveAsync();
             var result = _mapper.Map<OrderDto>(canceledOrder);
             
             return result; 
@@ -63,6 +65,7 @@ namespace AspNetCorePostgreSQLDockerApp.Services
             if (order == null) return null;
             
             var updatedOrder = await _orderRepository.UpdateOrderAsync(order);
+            await SaveAsync();
             var result = _mapper.Map<OrderDto>(updatedOrder);
             
             return result; 
