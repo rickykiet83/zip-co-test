@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using AspNetCorePostgreSQLDockerApp.Dtos;
 using AspNetCorePostgreSQLDockerApp.Test.Factories;
@@ -63,6 +64,16 @@ namespace AspNetCorePostgreSQLDockerApp.Test.DtoValidations
             var result = _validatorCreate.Validate(_orderDto);
             result.IsValid.Should().BeFalse();
             result.Errors.ElementAt(0).ErrorMessage.Should().Contain("maximum length should be 150");
+        }
+        
+        [Fact]
+        public void Should_Error_Result_When_Orders_IsEmpty()
+        {
+            _validatorCustomerCreateOrders = new CustomerCreateOrdersValidator();
+            _customerCreateOrdersDto.OrderDtos = new List<OrderForCreationDto>();
+            var result = _validatorCustomerCreateOrders.Validate(_customerCreateOrdersDto);
+            result.IsValid.Should().BeFalse();
+            result.Errors.ElementAt(0).ErrorMessage.Should().Contain("is required");
         }
         
         [Theory]
