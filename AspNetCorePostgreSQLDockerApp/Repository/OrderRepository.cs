@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AspNetCorePostgreSQLDockerApp.Models;
 using AspNetCorePostgreSQLDockerApp.Models.Abstract;
@@ -52,6 +53,11 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
             }
             
             return order;
+        }
+
+        public async Task<Order> GetOrderAsync(int orderId, bool trackChanges = false)
+        {
+            return await FindByCondition(o => o.Id.Equals(orderId), false).SingleOrDefaultAsync();
         }
 
         public async Task<Order> UpdateOrderAsync(Order order)

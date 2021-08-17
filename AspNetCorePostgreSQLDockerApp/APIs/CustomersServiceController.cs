@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AspNetCorePostgreSQLDockerApp.Apis
 {
     [Route("api/[controller]/customers")]
-    public class CustomersServiceController : Controller
+    public class CustomersServiceController : ControllerBase
     {
         private readonly ICustomersRepository _repo;
 

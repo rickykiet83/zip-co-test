@@ -8,7 +8,7 @@ namespace AspNetCorePostgreSQLDockerApp
     {
         public MappingProfile()
         {
-            CreateMap<Order, OrderDto>();
+            CreateMap<Order, OrderDto>().ReverseMap();
         }
     }
 }
