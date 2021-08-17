@@ -45,7 +45,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.DtoValidations
             _validatorCreate = new OrderCreateValidator();
             var result = _validatorCreate.Validate(_orderDto);
             result.IsValid.Should().BeFalse();
-            result.Errors.ElementAt(0).ErrorMessage.Should().Contain("is required");
+            result.Errors.ElementAt(0).ErrorMessage.Should().Contain("invalid");
         }
         
         [Fact]
@@ -103,7 +103,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.DtoValidations
             _validatorCreate = new OrderCreateValidator();
             var result = _validatorCreate.Validate(_orderDto);
             result.IsValid.Should().BeFalse();
-            result.Errors.FirstOrDefault().ErrorMessage.Should().Contain(">= 1");
+            result.Errors.FirstOrDefault().ErrorMessage.Should().Contain("> 0");
         }
         
         [Theory]
