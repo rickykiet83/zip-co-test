@@ -102,6 +102,10 @@ namespace AspNetCorePostgreSQLDockerApp
             builder.RegisterAssemblyTypes(asm)
                 .Where(t => t.Name.EndsWith("Repository", StringComparison.InvariantCulture))
                 .AsImplementedInterfaces();
+            
+            builder.RegisterAssemblyTypes(asm)
+                .Where(t => t.Name.EndsWith("Service", StringComparison.InvariantCulture))
+                .AsImplementedInterfaces();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

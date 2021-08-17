@@ -4,6 +4,16 @@ namespace AspNetCorePostgreSQLDockerApp.Dtos
 {
     public class OrderDto
     {
+        public OrderDto()
+        {
+            
+        }
+
+        public OrderDto(int customerId)
+        {
+            CustomerId = customerId;
+        }
+        
         public int Id { get; set; }
         public string Product { get; set; }
         public int Quantity { get; set; }

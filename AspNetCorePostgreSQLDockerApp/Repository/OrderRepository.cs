@@ -40,7 +40,7 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
             return order;
         }
 
-        public async Task<List<Order>> CreateOrdersAsync(int customerId, List<Order> orders)
+        public async Task<IEnumerable<Order>> CreateOrdersAsync(int customerId, List<Order> orders)
         {
             var resultOrders = new List<Order>();
             foreach (var order in orders)

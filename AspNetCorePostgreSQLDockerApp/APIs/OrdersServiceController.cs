@@ -7,6 +7,7 @@ using AspNetCorePostgreSQLDockerApp.Dtos;
 using AspNetCorePostgreSQLDockerApp.Helpers;
 using AspNetCorePostgreSQLDockerApp.Models;
 using AspNetCorePostgreSQLDockerApp.Repository;
+using AspNetCorePostgreSQLDockerApp.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,14 +18,14 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
     [Route("api/customers/{customerId}/orders")]
     public class OrdersServiceController : ControllerBase
     {
-        private readonly IOrderRepository _orderRepository;
+        private readonly IOrderService _orderService;
         private readonly ICustomersRepository _customersRepository;
         private readonly ILogger<OrdersServiceController> _logger;
         private readonly IMapper _mapper;
         
-        public OrdersServiceController(IOrderRepository orderRepository, IMapper mapper, ICustomersRepository customersRepository, ILogger<OrdersServiceController> logger)
+        public OrdersServiceController(IOrderService orderService, IMapper mapper, ICustomersRepository customersRepository, ILogger<OrdersServiceController> logger)
         {
-            _orderRepository = orderRepository;
+            _orderService = orderService;
             _mapper = mapper;
             _customersRepository = customersRepository;
             _logger = logger;
@@ -44,12 +45,10 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
         [ProducesResponseType(typeof(List<OrderDto>), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> GetOrders([Required] int customerId)
         {
-            var orders = await _orderRepository.GetOrdersAsync(customerId);
+            var orders = await _orderService.GetOrdersAsync(customerId);
             if (orders == null) return NotFound();
 
-            var ordersToReturn = _mapper.Map<IEnumerable<OrderDto>>(orders);
-
-            return new OkObjectResult(ordersToReturn);
+            return new OkObjectResult(orders);
         }
         
         [HttpGet("{orderId}", Name = RouteNames.GetOrder)]
@@ -57,12 +56,10 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
         [ProducesResponseType(typeof(List<OrderDto>), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> GetOrder([Required] int orderId)
         {
-            var order = await _orderRepository.GetOrderAsync(orderId);
+            var order = await _orderService.GetOrderAsync(orderId);
             if (order == null) return NotFound();
 
-            var orderToReturn = _mapper.Map<OrderDto>(order);
-
-            return new OkObjectResult(orderToReturn);
+            return new OkObjectResult(order);
         }
         
         [HttpPost(Name = RouteNames.CreateOrders)]
@@ -78,10 +75,8 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
                 return NotFound();
             }
             var orderEntities = _mapper.Map<IEnumerable<Order>>(ordersDto.OrderDtos);
-            await _orderRepository.CreateOrdersAsync(customerId, orderEntities.ToList());
-            var ordersToReturn = _mapper.Map<IEnumerable<OrderDto>>(orderEntities);
-
-            return StatusCode(StatusCodes.Status201Created, ordersToReturn);
+            var orders = await _orderService.CreateOrdersAsync(customerId, orderEntities.ToList());
+            return StatusCode(StatusCodes.Status201Created, orders.ToList());
         }
         
         [HttpPut("{orderId}",Name = RouteNames.UpdateOrder)]
@@ -90,35 +85,36 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
         [ProducesResponseType(typeof(OrderDto), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> UpdateOrder([Required] int customerId, [Required] int orderId, [FromBody]OrderForUpdateDto orderDto)
         {
-            var orderEntity = await _orderRepository.GetOrderAsync(orderDto.Id);
-            if (orderEntity == null)
+            var customer = await _customersRepository.GetCustomerAsync(customerId);
+            if (customer == null)
             {
-                _logger.LogInformation($"Customer with orderId: {orderDto.Id} doesn't exist in the database.");
+                _logger.LogInformation($"Customer with customerId: {customer.Id} doesn't exist in the database.");
                 return NotFound();
             }
 
-            var order = _mapper.Map<Order>(orderDto);
-            order = await _orderRepository.UpdateOrderAsync(order);
-            var ordersToReturn = _mapper.Map<OrderDto>(order);
+            var orderToReturn = await _orderService.UpdateOrderAsync(orderDto);
+            if (orderToReturn == null)
+            {
+                _logger.LogInformation($"Order with orderId: {orderDto.Id} doesn't exist in the database.");
+                return NotFound();
+            }
 
-            return StatusCode(StatusCodes.Status200OK, ordersToReturn);
+            return StatusCode(StatusCodes.Status200OK, orderToReturn);
         }
         
         [HttpGet("{orderId}/cancel", Name = RouteNames.CancelOrder)]
-        [ProducesResponseType(typeof(OrderDto), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(OrderDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(OrderDto), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> CancelOrder([Required] int orderId)
         {
-            var orderEntity = await _orderRepository.GetOrderAsync(orderId);
-            if (orderEntity == null)
+            var cancelOrder = await _orderService.CancelOrderAsync(orderId);
+            if (cancelOrder == null)
             {
-                _logger.LogInformation($"Customer with orderId: {orderId} doesn't exist in the database.");
+                _logger.LogInformation($"Order with orderId: {orderId} doesn't exist in the database.");
                 return NotFound();
             }
 
-            await _orderRepository.CancelOrderAsync(orderEntity);
-
-            return NoContent();
+            return StatusCode(StatusCodes.Status200OK, cancelOrder);
         }
 
     }
