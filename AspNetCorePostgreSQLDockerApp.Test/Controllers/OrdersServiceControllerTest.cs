@@ -7,6 +7,7 @@ using AspNetCorePostgreSQLDockerApp.Repository;
 using AspNetCorePostgreSQLDockerApp.Test.Factories;
 using AutoMapper;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -57,8 +58,8 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Controllers
             };
                 
             var result = controller.CreateOrders(customer.Id, orderDto).Result;
-            result.Should().BeOfType(typeof(OkObjectResult));
-            Assert.Equal(200, (result as OkObjectResult).StatusCode);
+            result.Should().BeOfType(typeof(ObjectResult));
+            Assert.Equal(StatusCodes.Status201Created, (result as ObjectResult).StatusCode);
         }
         
         [Fact]
@@ -96,9 +97,9 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Controllers
 
             var controller =
                 new OrdersServiceController(_orderRepoMock.Object, _mapper, _customerRepoMock.Object, _loggerMock.Object);
-            var result = controller.UpdateOrder(order.ToUpdateDto(customer.Id)).Result;
-            result.Should().BeOfType(typeof(NoContentResult));
-            Assert.Equal(204, (result as NoContentResult).StatusCode);
+            var result = controller.UpdateOrder(customer.Id, order.Id, order.ToUpdateDto(customer.Id)).Result;
+            result.Should().BeOfType(typeof(ObjectResult));
+            Assert.Equal(StatusCodes.Status200OK, (result as ObjectResult).StatusCode);
         }
         
         [Fact]

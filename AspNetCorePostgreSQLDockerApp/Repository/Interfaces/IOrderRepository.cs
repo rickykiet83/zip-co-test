@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AspNetCorePostgreSQLDockerApp.Models;
+using AspNetCorePostgreSQLDockerApp.Models.Abstract;
 
 namespace AspNetCorePostgreSQLDockerApp.Repository
 {

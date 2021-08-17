@@ -11,6 +11,7 @@ namespace AspNetCorePostgreSQLDockerApp
             CreateMap<Order, OrderDto>().ReverseMap();
             
             CreateMap<OrderForCreationDto, Order>();
+            CreateMap<OrderForUpdateDto, Order>();
             CreateMap<OrderForManipulationDto, Order>().ReverseMap();
         }
     }

@@ -3,16 +3,10 @@ using FluentValidation;
 
 namespace AspNetCorePostgreSQLDockerApp.Validations
 {
-    public class OrderUpdateValidator : AbstractValidator<OrderForUpdateDto>
+    public class OrderValidator : AbstractValidator<OrderForManipulationDto>
     {
-        public OrderUpdateValidator()
+        public OrderValidator()
         {
-            RuleFor(x => x.Id)
-                .NotEmpty().WithMessage("Id is required.")
-                .GreaterThanOrEqualTo(0).WithMessage("Id invalid.");
-            RuleFor(x => x.CustomerId)
-                .NotEmpty().WithMessage("Customer Id is required.")
-                .GreaterThan(0).WithMessage("Customer Id is invalid.");
             RuleFor(x => x.Product)
                 .NotEmpty().WithMessage("Product is required")
                 .MaximumLength(150).WithMessage("Product name maximum length should be 150.")
@@ -22,6 +16,8 @@ namespace AspNetCorePostgreSQLDockerApp.Validations
                 .GreaterThanOrEqualTo(1).WithMessage("Quantity should be >= 1.");
             RuleFor(x => x.Price)
                 .GreaterThanOrEqualTo(0).WithMessage("Price should be >= 0.");
+            RuleFor(x => x.CustomerId)
+                .NotEmpty().WithMessage("Customer Id is required.");
             RuleFor(x => x.Status)
                 .IsInEnum().WithMessage("Order status is not supported.");
         }

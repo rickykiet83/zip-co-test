@@ -47,14 +47,17 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Repositories
         public void FindAll_Should_Return_All_Record_In_Table()
         {
             CustomersRepository repository = new CustomersRepository(_context, _logger, _stateRepository);
-            var customers = CustomerFactory.Customer.Generate(10);
+            var customers = CustomerFactory.Customer
+                .Generate(10);
+            
             foreach (var customer in customers)
             {
                 repository.Create(customer);
             }
-
+            
             _unitOfWork.Commit();
-            List<Customer> results = repository.FindAll(false).ToList();
+
+            List<Customer> results = repository.FindAll(true).ToList();
             results.Should().NotBeNull();
             results.Count.Should().Equals(10);
         }
@@ -83,7 +86,6 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Repositories
             var updateCustomer = repository.FindByCondition(x => x.Id.Equals(customer.Id), true).SingleOrDefault();
             updateCustomer.FirstName = "Test";
             repository.Update(updateCustomer);
-            _unitOfWork.Commit();
 
             var result = repository.FindByCondition(x => x.Id.Equals(customer.Id), true).SingleOrDefault();
             result.Should().NotBeNull();

@@ -67,40 +67,41 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
         
         [HttpPost(Name = RouteNames.CreateOrders)]
         [ApiValidationFilter]
-        [ProducesResponseType(typeof(List<OrderForCreationDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<OrderForCreationDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(List<OrderForCreationDto>), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> CreateOrders([Required] int customerId, [FromBody]CustomerCreateOrdersDto ordersDto)
         {
             var customer = await _customersRepository.GetCustomerAsync(customerId);
             if (customer == null)
             {
-                _logger.LogInformation($"Customer with id: {customer} doesn't exist in the database.");
+                _logger.LogInformation($"Customer with orderId: {customer} doesn't exist in the database.");
                 return NotFound();
             }
             var orderEntities = _mapper.Map<IEnumerable<Order>>(ordersDto.OrderDtos);
             await _orderRepository.CreateOrdersAsync(customerId, orderEntities.ToList());
             var ordersToReturn = _mapper.Map<IEnumerable<OrderDto>>(orderEntities);
 
-            return new OkObjectResult(ordersToReturn);
+            return StatusCode(StatusCodes.Status201Created, ordersToReturn);
         }
         
-        [HttpPut(Name = RouteNames.UpdateOrder)]
+        [HttpPut("{orderId}",Name = RouteNames.UpdateOrder)]
         [ApiValidationFilter]
-        [ProducesResponseType(typeof(OrderDto), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(OrderDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(OrderDto), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> UpdateOrder(OrderForUpdateDto orderDto)
+        public async Task<ActionResult> UpdateOrder([Required] int customerId, [Required] int orderId, [FromBody]OrderForUpdateDto orderDto)
         {
             var orderEntity = await _orderRepository.GetOrderAsync(orderDto.Id);
             if (orderEntity == null)
             {
-                _logger.LogInformation($"Customer with id: {orderDto.Id} doesn't exist in the database.");
+                _logger.LogInformation($"Customer with orderId: {orderDto.Id} doesn't exist in the database.");
                 return NotFound();
             }
 
             var order = _mapper.Map<Order>(orderDto);
-            await _orderRepository.UpdateOrderAsync(order);
+            order = await _orderRepository.UpdateOrderAsync(order);
+            var ordersToReturn = _mapper.Map<OrderDto>(order);
 
-            return NoContent();
+            return StatusCode(StatusCodes.Status200OK, ordersToReturn);
         }
         
         [HttpGet("{orderId}/cancel", Name = RouteNames.CancelOrder)]
@@ -111,7 +112,7 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
             var orderEntity = await _orderRepository.GetOrderAsync(orderId);
             if (orderEntity == null)
             {
-                _logger.LogInformation($"Customer with id: {orderId} doesn't exist in the database.");
+                _logger.LogInformation($"Customer with orderId: {orderId} doesn't exist in the database.");
                 return NotFound();
             }
 
