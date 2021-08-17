@@ -26,7 +26,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Repositories
         }
 
         [Fact]
-        public async Task Add_Valid_Order_Result_Success()
+        public async Task Add_Valid_Orders_Result_Success()
         {
             var customer = CustomerFactory.Customer.Generate();
             CustomersRepository customersRepository = new CustomersRepository(_context, _logger, _stateRepository);
@@ -34,12 +34,9 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Repositories
             
             var orders = OrderFactory.Order.Generate(4).Select(o => o.AddCustomer(customer))
                 .ToList();
-            customer.Orders = orders;
+            customer.AddOrders(orders);
             OrderRepository orderRepository = new OrderRepository(_context, _logger);
-            foreach (var order in orders)
-            {
-                await orderRepository.InsertOrderAsync(order);
-            }
+            await orderRepository.CreateOrdersAsync(customer.Id, customer.Orders);
 
             var result = await orderRepository.GetOrdersAsync(customer.Id);
             result.Should().NotBeNullOrEmpty();
@@ -56,13 +53,9 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Repositories
             var orders = OrderFactory.Order.Generate(1).Select(o => o.AddCustomer(customer))
                 .ToList();
             orders.ElementAt(0).Status = EOrderStatus.InProgress;
-            customer.Orders = orders;
+            customer.AddOrders(orders);
             OrderRepository orderRepository = new OrderRepository(_context, _logger);
-            foreach (var order in orders)
-            {
-                await orderRepository.InsertOrderAsync(order);
-            }
-
+            await orderRepository.CreateOrdersAsync(customer.Id, orders);
             var cancelOrder = orders.ElementAt(0);
             var result = await orderRepository.CancelOrderAsync(cancelOrder);
 
@@ -79,12 +72,9 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Repositories
             
             var orders = OrderFactory.Order.Generate(1).Select(o => o.AddCustomer(customer))
                 .ToList();
-            customer.Orders = orders;
+            customer.AddOrders(orders);
             OrderRepository orderRepository = new OrderRepository(_context, _logger);
-            foreach (var order in orders)
-            {
-                await orderRepository.InsertOrderAsync(order);
-            }
+            await orderRepository.CreateOrdersAsync(customer.Id, orders);
 
             var updateOrder = orders.ElementAt(0);
             updateOrder.Product = "Test";

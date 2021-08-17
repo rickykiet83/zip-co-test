@@ -20,6 +20,12 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Factories
             .RuleFor(o => o.CustomerId, 0)
             ;
 
+        public static Order AddIndexKey(this Order order)
+        {
+            return Order
+                .RuleFor(o => o.Id, f => f.IndexFaker);
+        }
+        
         public static Order AddCustomer(this Order order, Customer customer)
         {
             order.Customer = customer;
@@ -27,27 +33,25 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Factories
             return order;
         }
 
-        public static OrderForCreationDto ToCreateDto(this Order order)
+        public static OrderForCreationDto ToCreateDto(this Order order, int customerId)
         {
-            return new OrderForCreationDto()
+            return new OrderForCreationDto(customerId)
             {
                 Price = order.Price,
                 Product = order.Product,
                 Quantity = order.Quantity,
-                CustomerId = order.CustomerId,
                 Status = order.Status
             };
         }
         
-        public static OrderForUpdateDto ToUpdateDto(this Order order)
+        public static OrderForUpdateDto ToUpdateDto(this Order order, int customerId)
         {
-            return new OrderForUpdateDto()
+            return new OrderForUpdateDto(customerId)
             {
                 Id = order.Id,
                 Price = order.Price,
                 Product = order.Product,
                 Quantity = order.Quantity,
-                CustomerId = order.CustomerId,
                 Status = order.Status
             };
         }

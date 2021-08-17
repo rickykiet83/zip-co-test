@@ -25,7 +25,7 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
             return orders;
         }
 
-        public async Task<Order> InsertOrderAsync(Order order)
+        private async Task<Order> InsertOrderAsync(Order order)
         {
             try
             {
@@ -34,10 +34,23 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
             }
             catch (Exception exp)
             {
-                _logger.LogError($"Error in {nameof(InsertOrderAsync)}: " + exp.Message);
+                _logger.LogError($"Error in {nameof(InsertOrderAsync)}, {order}: " + exp.Message);
             }
 
             return order;
+        }
+
+        public async Task<List<Order>> CreateOrdersAsync(int customerId, List<Order> orders)
+        {
+            var resultOrders = new List<Order>();
+            foreach (var order in orders)
+            {
+                order.CustomerId = customerId;
+                await InsertOrderAsync(order);
+                resultOrders.Add(order);
+            }
+
+            return resultOrders;
         }
 
         public async Task<Order> CancelOrderAsync(Order order)

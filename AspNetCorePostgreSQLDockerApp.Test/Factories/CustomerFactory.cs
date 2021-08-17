@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using AspNetCorePostgreSQLDockerApp.Dtos;
 using AspNetCorePostgreSQLDockerApp.Models;
 using Bogus;
 using Bogus.DataSets;
 
 namespace AspNetCorePostgreSQLDockerApp.Test.Factories
 {
-    public class CustomerFactory
+    public static class CustomerFactory
     {
         private static readonly List<string> _genders = new List<string>{"Male", "Female"};
 
@@ -29,5 +31,26 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Factories
             .RuleFor(o => o.Orders, new List<Order>())
             .RuleFor(o => o.OrderCount, 0)
             ;
+        
+        public static Customer AddIndexKey(this Customer customer)
+        {
+            return Customer
+                .RuleFor(o => o.Id, f => f.IndexFaker);
+        }
+
+        public static Customer AddOrders(this Customer customer, List<Order> orders)
+        {
+            return Customer.RuleFor(c => c.Orders, orders);
+        }
+
+        public static CustomerCreateOrdersDto ToCreateOrderDtos(this Customer customer)
+        {
+            return new CustomerCreateOrdersDto()
+            {
+                CustomerId = customer.Id,
+                OrderDtos =  customer.Orders.Select(o => o.ToCreateDto(customer.Id))
+                    .ToList()
+            };
+        }
     }
 }
