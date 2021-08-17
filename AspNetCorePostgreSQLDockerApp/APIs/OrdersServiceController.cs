@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using AspNetCorePostgreSQLDockerApp.Dtos;
 using AspNetCorePostgreSQLDockerApp.Helpers;
@@ -93,13 +92,10 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
             }
 
             var orderToReturn = await _orderService.UpdateOrderAsync(orderDto);
-            if (orderToReturn == null)
-            {
-                _logger.LogInformation($"Order with orderId: {orderDto.Id} doesn't exist in the database.");
-                return NotFound();
-            }
+            if (orderToReturn != null) return StatusCode(StatusCodes.Status200OK, orderToReturn);
+            _logger.LogInformation($"Order with orderId: {orderDto.Id} doesn't exist in the database.");
+            return NotFound();
 
-            return StatusCode(StatusCodes.Status200OK, orderToReturn);
         }
         
         [HttpGet("{orderId}/cancel", Name = RouteNames.CancelOrder)]
@@ -108,13 +104,10 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
         public async Task<ActionResult> CancelOrder([Required] int orderId)
         {
             var cancelOrder = await _orderService.CancelOrderAsync(orderId);
-            if (cancelOrder == null)
-            {
-                _logger.LogInformation($"Order with orderId: {orderId} doesn't exist in the database.");
-                return NotFound();
-            }
+            if (cancelOrder != null) return StatusCode(StatusCodes.Status200OK, cancelOrder);
+            _logger.LogInformation($"Order with orderId: {orderId} doesn't exist in the database.");
+            return NotFound();
 
-            return StatusCode(StatusCodes.Status200OK, cancelOrder);
         }
 
     }
