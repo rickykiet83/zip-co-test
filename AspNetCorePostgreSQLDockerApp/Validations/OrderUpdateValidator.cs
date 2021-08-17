@@ -9,8 +9,10 @@ namespace AspNetCorePostgreSQLDockerApp.Validations
         {
             RuleFor(x => x.Id)
                 .NotEmpty().WithMessage("Id is required")
-                .GreaterThanOrEqualTo(0).WithMessage("Id invalid")
-                ;
+                .GreaterThanOrEqualTo(0).WithMessage("Id invalid");
+            RuleFor(x => x.CustomerId)
+                .NotEmpty().WithMessage("Customer Id is required")
+                .GreaterThan(0).WithMessage("Customer Id is invalid");
         }
     }
 }

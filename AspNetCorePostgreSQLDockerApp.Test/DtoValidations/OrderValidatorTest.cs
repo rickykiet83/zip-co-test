@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using AspNetCorePostgreSQLDockerApp.Constants;
 using AspNetCorePostgreSQLDockerApp.Dtos;
+using AspNetCorePostgreSQLDockerApp.Models.Abstract;
 using AspNetCorePostgreSQLDockerApp.Test.Factories;
 using AspNetCorePostgreSQLDockerApp.Validations;
 using Bogus;
@@ -74,6 +76,22 @@ namespace AspNetCorePostgreSQLDockerApp.Test.DtoValidations
             var result = _validatorCustomerCreateOrders.Validate(_customerCreateOrdersDto);
             result.IsValid.Should().BeFalse();
             result.Errors.ElementAt(0).ErrorMessage.Should().Contain("is required");
+        }
+        
+        [Fact]
+        public void Should_Error_Result_When_Total_Order_Inprogress_GreaterThan_4()
+        {
+            _validatorCustomerCreateOrders = new CustomerCreateOrdersValidator();
+            var orders = OrderFactory.Order
+                .RuleFor(o => o.Status, EOrderStatus.InProgress)
+                .Generate(SystemConstants.TotalInProgressAllow + 1)
+                .Select(o => o.ToCreateDto(_customerCreateOrdersDto.CustomerId))
+                .ToList();
+
+            _customerCreateOrdersDto.OrderDtos = orders;
+            var result = _validatorCustomerCreateOrders.Validate(_customerCreateOrdersDto);
+            result.IsValid.Should().BeFalse();
+            result.Errors.ElementAt(0).ErrorMessage.Should().Contain("Maximum of 4");
         }
         
         [Theory]
