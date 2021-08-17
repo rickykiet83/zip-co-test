@@ -11,20 +11,21 @@ namespace AspNetCorePostgreSQLDockerApp.Test.DtoValidations
 {
     public class OrderValidatorTest
     {
-        private OrderCreateValidator _validator;
-        private OrderDto _orderDto;
+        private OrderCreateValidator _validatorCreate;
+        private OrderUpdateValidator _validatorUpdate;
+        private readonly OrderForCreationDto _orderDto;
 
         public OrderValidatorTest()
         {
-            _orderDto = OrderFactory.Order.Generate().ToDto();
+            _orderDto = OrderFactory.Order.Generate().ToCreateDto();
             _orderDto.CustomerId = 1;
         }
 
         [Fact]
         public void Should_Valid_Result_When_Valid_Request()
         {
-            _validator = new OrderCreateValidator();
-            var result = _validator.Validate(_orderDto);
+            _validatorCreate = new OrderCreateValidator();
+            var result = _validatorCreate.Validate(_orderDto);
             result.IsValid.Should().BeTrue();
         }
         
@@ -32,8 +33,8 @@ namespace AspNetCorePostgreSQLDockerApp.Test.DtoValidations
         public void Should_Error_Result_When_Dto_Miss_CustomerId()
         {
             _orderDto.CustomerId = 0;
-            _validator = new OrderCreateValidator();
-            var result = _validator.Validate(_orderDto);
+            _validatorCreate = new OrderCreateValidator();
+            var result = _validatorCreate.Validate(_orderDto);
             result.IsValid.Should().BeFalse();
             result.Errors.ElementAt(0).ErrorMessage.Should().Contain("is required");
         }
@@ -42,8 +43,8 @@ namespace AspNetCorePostgreSQLDockerApp.Test.DtoValidations
         public void Should_Error_Result_When_Dto_Miss_ProductName()
         {
             _orderDto.Product = string.Empty;
-            _validator = new OrderCreateValidator();
-            var result = _validator.Validate(_orderDto);
+            _validatorCreate = new OrderCreateValidator();
+            var result = _validatorCreate.Validate(_orderDto);
             result.IsValid.Should().BeFalse();
             result.Errors.ElementAt(0).ErrorMessage.Should().Contain("is required");
         }
@@ -52,8 +53,8 @@ namespace AspNetCorePostgreSQLDockerApp.Test.DtoValidations
         public void Should_Error_Result_When_Dto_ProductName_Length_GreaterThan_150()
         {
             _orderDto.Product = new string(new Faker().Random.Chars(count: 151));
-            _validator = new OrderCreateValidator();
-            var result = _validator.Validate(_orderDto);
+            _validatorCreate = new OrderCreateValidator();
+            var result = _validatorCreate.Validate(_orderDto);
             result.IsValid.Should().BeFalse();
             result.Errors.ElementAt(0).ErrorMessage.Should().Contain("maximum length should be 150");
         }
@@ -64,8 +65,8 @@ namespace AspNetCorePostgreSQLDockerApp.Test.DtoValidations
         public void Should_Error_Result_When_Dto_Quantity_LessThan_1(int quantity)
         {
             _orderDto.Quantity = quantity;
-            _validator = new OrderCreateValidator();
-            var result = _validator.Validate(_orderDto);
+            _validatorCreate = new OrderCreateValidator();
+            var result = _validatorCreate.Validate(_orderDto);
             result.IsValid.Should().BeFalse();
             result.Errors.FirstOrDefault().ErrorMessage.Should().Contain(">= 1");
         }
@@ -75,8 +76,8 @@ namespace AspNetCorePostgreSQLDockerApp.Test.DtoValidations
         public void Should_Error_Result_When_Dto_Price_Invalid(decimal price)
         {
             _orderDto.Price = price;
-            _validator = new OrderCreateValidator();
-            var result = _validator.Validate(_orderDto);
+            _validatorCreate = new OrderCreateValidator();
+            var result = _validatorCreate.Validate(_orderDto);
             result.IsValid.Should().BeFalse();
             result.Errors.FirstOrDefault().ErrorMessage.Should().Contain(">= 0");
         }
@@ -86,11 +87,13 @@ namespace AspNetCorePostgreSQLDockerApp.Test.DtoValidations
         [InlineData(0)]
         public void Should_Error_Result_When_Update_Dto_Without_Id(int id)
         {
-            _orderDto.Id = id;
-            _validator = new OrderUpdateValidator();
-            var result = _validator.Validate(_orderDto);
+            _validatorUpdate = new OrderUpdateValidator();
+            var updateOrderDto = OrderFactory.Order.Generate().ToUpdateDto();
+            updateOrderDto.Id = id;
+            var result = _validatorUpdate.Validate(updateOrderDto);
             result.IsValid.Should().BeFalse();
-            result.Errors.FirstOrDefault().ErrorMessage.Should().Contain("invalid");
+            var errorMessages = result.Errors.ToList();
+            errorMessages.Should().Contain(errorMessages, "invalid", "required");
         }
     }
 }

@@ -8,6 +8,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -41,12 +42,16 @@ namespace AspNetCorePostgreSQLDockerApp
 
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddControllersWithViews().AddJsonOptions(opts =>
-            {
-                var enumConverter = new JsonStringEnumConverter();
-                opts.JsonSerializerOptions.Converters.Add(enumConverter);
-            }).AddFluentValidation(fv =>
-                fv.RegisterValidatorsFromAssemblyContaining<OrderCreateValidator>());;
+            services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
+            services.AddControllersWithViews()
+                .AddFluentValidation(fv =>
+                    fv.RegisterValidatorsFromAssemblyContaining<OrderCreateValidator>())
+                .AddJsonOptions(opts =>
+                {
+                    var enumConverter = new JsonStringEnumConverter();
+                    opts.JsonSerializerOptions.Converters.Add(enumConverter);
+                })
+                ;
 
             // Add our PostgreSQL Repositories (scoped to each request)
             // services.AddScoped<IDockerCommandsRepository, DockerCommandsRepository>();

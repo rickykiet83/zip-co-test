@@ -27,15 +27,28 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Factories
             return order;
         }
 
-        public static OrderDto ToDto(this Order order)
+        public static OrderForCreationDto ToCreateDto(this Order order)
         {
-            return new OrderDto
+            return new OrderForCreationDto()
+            {
+                Price = order.Price,
+                Product = order.Product,
+                Quantity = order.Quantity,
+                CustomerId = order.CustomerId,
+                Status = order.Status
+            };
+        }
+        
+        public static OrderForUpdateDto ToUpdateDto(this Order order)
+        {
+            return new OrderForUpdateDto()
             {
                 Id = order.Id,
                 Price = order.Price,
                 Product = order.Product,
                 Quantity = order.Quantity,
-                CustomerId = order.CustomerId
+                CustomerId = order.CustomerId,
+                Status = order.Status
             };
         }
     }

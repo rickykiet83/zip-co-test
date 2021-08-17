@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace AspNetCorePostgreSQLDockerApp.Validations
 {
-    public class OrderCreateValidator : AbstractValidator<OrderDto>
+    public class OrderCreateValidator : AbstractValidator<OrderForCreationDto>
     {
         public OrderCreateValidator()
         {

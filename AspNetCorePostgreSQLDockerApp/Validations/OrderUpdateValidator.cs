@@ -1,14 +1,15 @@
+using AspNetCorePostgreSQLDockerApp.Dtos;
 using FluentValidation;
 
 namespace AspNetCorePostgreSQLDockerApp.Validations
 {
-    public class OrderUpdateValidator : OrderCreateValidator
+    public class OrderUpdateValidator : AbstractValidator<OrderForUpdateDto>
     {
         public OrderUpdateValidator()
         {
             RuleFor(x => x.Id)
                 .NotEmpty().WithMessage("Id is required")
-                .GreaterThan(0).WithMessage("Id invalid")
+                .GreaterThanOrEqualTo(0).WithMessage("Id invalid")
                 ;
         }
     }

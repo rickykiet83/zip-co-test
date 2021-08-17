@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading.Tasks;
 using AspNetCorePostgreSQLDockerApp.Dtos;
+using AspNetCorePostgreSQLDockerApp.Helpers;
 using AspNetCorePostgreSQLDockerApp.Models;
 using AspNetCorePostgreSQLDockerApp.Repository;
 using AutoMapper;
@@ -55,16 +56,19 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
         [ProducesResponseType(typeof(List<Order>), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> GetOrder([Required] int orderId)
         {
-            var orders = await _orderRepository.GetOrderAsync(orderId);
-            if (orders == null) return NotFound();
+            var order = await _orderRepository.GetOrderAsync(orderId);
+            if (order == null) return NotFound();
 
-            return Ok(orders);
+            var orderToReturn = _mapper.Map<OrderDto>(order);
+
+            return Ok(orderToReturn);
         }
         
         [HttpPost(Name = RouteNames.CreateOrder)]
+        [ApiValidationFilter]
         [ProducesResponseType(typeof(Order), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Order), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> CreateOrders([Required] int customerId, OrderDto orderDto)
+        public async Task<ActionResult> CreateOrder([Required] int customerId, OrderForCreationDto orderDto)
         {
             var customer = await _customersRepository.GetCustomerAsync(customerId);
             if (customer == null)
@@ -72,7 +76,6 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
                 _logger.LogInformation($"Customer with id: {customer} doesn't exist in the database.");
                 return NotFound();
             }
-            orderDto.CustomerId = customerId;
             var orderEntity = _mapper.Map<Order>(orderDto);
             await _orderRepository.InsertOrderAsync(orderEntity);
             var orderToReturn = _mapper.Map<OrderDto>(orderEntity);
@@ -81,11 +84,12 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
         }
         
         [HttpPut(Name = RouteNames.UpdateOrder)]
+        [ApiValidationFilter]
         [ProducesResponseType(typeof(Order), StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(Order), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> UpdateOrder(OrderDto orderDto)
+        public async Task<ActionResult> UpdateOrder(OrderForUpdateDto orderDto)
         {
-            var orderEntity = await _orderRepository.GetOrderAsync(orderDto.Id.Value);
+            var orderEntity = await _orderRepository.GetOrderAsync(orderDto.Id);
             if (orderEntity == null)
             {
                 _logger.LogInformation($"Customer with id: {orderDto.Id} doesn't exist in the database.");
