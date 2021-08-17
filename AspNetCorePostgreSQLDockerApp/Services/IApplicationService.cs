@@ -24,7 +24,6 @@ namespace AspNetCorePostgreSQLDockerApp.Services
         : IApplicationService<TEntity, TEntityDto, TKey>
         where TEntity : IEntity<TKey>
         where TEntityDto : IEntity<TKey>
-        where TEntityCreateDto : IEntity<TKey>
     {
         void Create(TEntityCreateDto input);
     }
@@ -33,7 +32,6 @@ namespace AspNetCorePostgreSQLDockerApp.Services
         : IApplicationService<TEntity, TEntityDto, TEntityCreateDto, TKey>
         where TEntity : IEntity<TKey>
         where TEntityDto : IEntity<TKey>
-        where TEntityCreateDto : IEntity<TKey>
         where TEntityUpdateDto : IEntity<TKey>
     {
         void Update(TEntityUpdateDto input, TKey id);

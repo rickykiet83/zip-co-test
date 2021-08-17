@@ -36,7 +36,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Repositories
                 .ToList();
             customer.AddOrders(orders);
             OrderRepository orderRepository = new OrderRepository(_context, _logger);
-            await orderRepository.CreateOrdersAsync(customer.Id, customer.Orders);
+            orderRepository.CreateOrders(customer.Id, customer.Orders);
 
             var result = await orderRepository.GetOrdersAsync(customer.Id);
             result.Should().NotBeNullOrEmpty();
@@ -55,7 +55,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Repositories
             orders.ElementAt(0).Status = EOrderStatus.InProgress;
             customer.AddOrders(orders);
             OrderRepository orderRepository = new OrderRepository(_context, _logger);
-            await orderRepository.CreateOrdersAsync(customer.Id, orders);
+            orderRepository.CreateOrders(customer.Id, orders);
             var cancelOrder = orders.ElementAt(0);
             var result = await orderRepository.CancelOrderAsync(cancelOrder);
 
@@ -74,7 +74,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Repositories
                 .ToList();
             customer.AddOrders(orders);
             OrderRepository orderRepository = new OrderRepository(_context, _logger);
-            await orderRepository.CreateOrdersAsync(customer.Id, orders);
+            orderRepository.CreateOrders(customer.Id, orders);
 
             var updateOrder = orders.ElementAt(0);
             updateOrder.Product = "Test";
@@ -82,7 +82,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Repositories
             updateOrder.Quantity = 1;
             updateOrder.Status = EOrderStatus.Delivered;
 
-            var result = await orderRepository.UpdateOrderAsync(updateOrder);
+            var result = orderRepository.UpdateOrder(updateOrder);
             result.AddCustomer(customer);
             
             result.Should().NotBeNull();

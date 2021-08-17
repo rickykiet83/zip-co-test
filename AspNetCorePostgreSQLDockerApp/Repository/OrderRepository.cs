@@ -25,7 +25,7 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
             return orders;
         }
 
-        public async Task<IEnumerable<Order>> CreateOrdersAsync(int customerId, List<Order> orders)
+        public IEnumerable<Order> CreateOrders(int customerId, List<Order> orders)
         {
             var resultOrders = new List<Order>();
             foreach (var order in orders)
@@ -43,7 +43,7 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
             try
             {
                 order.Status = EOrderStatus.Cancelled;
-                await UpdateOrderAsync(order);
+                UpdateOrder(order);
             }
             catch (Exception exp)
             {
@@ -58,7 +58,7 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
             return await FindByIdAsync(orderId);
         }
 
-        public async Task<Order> UpdateOrderAsync(Order order)
+        public Order UpdateOrder(Order order)
         {
             try
             {
@@ -66,7 +66,7 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
             }
             catch (Exception exp)
             {
-                _logger.LogError($"Error in {nameof(UpdateOrderAsync)}: " + exp.Message);
+                _logger.LogError($"Error in {nameof(UpdateOrder)}: " + exp.Message);
             }
             
             return order;

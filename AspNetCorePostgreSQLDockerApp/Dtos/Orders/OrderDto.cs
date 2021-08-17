@@ -2,7 +2,7 @@ using AspNetCorePostgreSQLDockerApp.Models.Abstract;
 
 namespace AspNetCorePostgreSQLDockerApp.Dtos
 {
-    public class OrderDto
+    public class OrderDto : IEntity<int>
     {
         public OrderDto()
         {

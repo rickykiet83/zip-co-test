@@ -59,7 +59,6 @@ namespace AspNetCorePostgreSQLDockerApp.Services
         IApplicationService<T, TDto, TCreateDto, K>
         where T : IEntity<K>
         where TDto : IEntity<K>
-        where TCreateDto : IEntity<K>
     {
         public ApplicationService(IRepositoryBase<T, K> repository, IUnitOfWork unitOfWork, IMapper mapper) : base(
             repository, unitOfWork, mapper)
@@ -77,7 +76,6 @@ namespace AspNetCorePostgreSQLDockerApp.Services
         IApplicationService<T, TDto, TCreateDto, TUpdateDto, K>
         where T : IEntity<K>
         where TDto : IEntity<K>
-        where TCreateDto : IEntity<K>
         where TUpdateDto : IEntity<K>
     {
         public ApplicationService(IRepositoryBase<T, K> repository, IUnitOfWork unitOfWork, IMapper mapper) : base(

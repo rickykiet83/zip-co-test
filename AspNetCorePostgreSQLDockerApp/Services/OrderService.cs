@@ -8,18 +8,15 @@ using AutoMapper;
 
 namespace AspNetCorePostgreSQLDockerApp.Services
 {
-    public class OrderService : IOrderService
+    public class OrderService : ApplicationService<Order, OrderDto, OrderForCreationDto, OrderForUpdateDto, int>, IOrderService
     {
         private readonly IOrderRepository _orderRepository;
-        private readonly IMapper _mapper;
-        private readonly IUnitOfWork _unitOfWork;
         
-        public OrderService(IOrderRepository orderRepository, IMapper mapper, IUnitOfWork unitOfWork)
+        public OrderService(IRepositoryBase<Order, int> repository, IUnitOfWork unitOfWork, IMapper mapper, IOrderRepository orderRepository) : base(repository, unitOfWork, mapper)
         {
             _orderRepository = orderRepository;
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
         }
+      
         
         public async Task<IEnumerable<OrderDto>> GetOrdersAsync(int customerId, bool trackChanges = false)
         {
@@ -40,7 +37,7 @@ namespace AspNetCorePostgreSQLDockerApp.Services
 
         public async Task<IEnumerable<OrderDto>> CreateOrdersAsync(int customerId, List<Order> orders)
         {
-            var addedOrders = await _orderRepository.CreateOrdersAsync(customerId, orders);
+            var addedOrders = _orderRepository.CreateOrders(customerId, orders);
             await SaveAsync();
             var result = _mapper.Map<IEnumerable<OrderDto>>(addedOrders);
             
@@ -64,16 +61,11 @@ namespace AspNetCorePostgreSQLDockerApp.Services
             var order = await _orderRepository.GetOrderAsync(orderDto.Id);
             if (order == null) return null;
             
-            var updatedOrder = await _orderRepository.UpdateOrderAsync(order);
+            var updatedOrder = _orderRepository.UpdateOrder(order);
             await SaveAsync();
             var result = _mapper.Map<OrderDto>(updatedOrder);
             
             return result; 
-        }
-
-        public Task<int> SaveAsync()
-        {
-            return _unitOfWork.CommitAsync();
         }
     }
 }

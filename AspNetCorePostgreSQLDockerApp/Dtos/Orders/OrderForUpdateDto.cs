@@ -1,6 +1,8 @@
+using AspNetCorePostgreSQLDockerApp.Models.Abstract;
+
 namespace AspNetCorePostgreSQLDockerApp.Dtos
 {
-    public class OrderForUpdateDto : OrderForManipulationDto
+    public class OrderForUpdateDto : OrderForManipulationDto, IEntity<int>
     {
         public OrderForUpdateDto()
         {

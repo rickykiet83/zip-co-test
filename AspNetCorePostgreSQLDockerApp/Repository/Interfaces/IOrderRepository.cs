@@ -5,12 +5,12 @@ using AspNetCorePostgreSQLDockerApp.Models.Abstract;
 
 namespace AspNetCorePostgreSQLDockerApp.Repository
 {
-    public interface IOrderRepository
+    public interface IOrderRepository : IRepositoryBase<Order, int>
     {
         Task<IEnumerable<Order>> GetOrdersAsync(int customerId, bool trackChanges = false);
         Task<Order> GetOrderAsync(int orderId, bool trackChanges = false);
-        Task<IEnumerable<Order>> CreateOrdersAsync(int customerId, List<Order> orders);
+        IEnumerable<Order> CreateOrders(int customerId, List<Order> orders);
         Task<Order> CancelOrderAsync(Order order);
-        Task<Order> UpdateOrderAsync(Order order);
+        Order UpdateOrder(Order order);
     }
 }
