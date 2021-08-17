@@ -26,8 +26,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Controllers
         private MapperConfiguration _mapperConfiguration;
         private readonly Mapper _mapper;
         private readonly Mock<IUnitOfWork> _mockUnitOfWork;
-        private OrderService _orderService;
-        private Customer customer;
+        private readonly Customer customer;
         
         public OrdersServiceControllerTest()
         {

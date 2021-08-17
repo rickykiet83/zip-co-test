@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace AspNetCorePostgreSQLDockerApp.Repository
 {
     public class UnitOfWork : IUnitOfWork
@@ -12,6 +14,11 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
         public void Commit()
         {
             _context.SaveChanges();
+        }
+
+        public Task<int> CommitAsync()
+        {
+            return _context.SaveChangesAsync();
         }
 
         public void Dispose()

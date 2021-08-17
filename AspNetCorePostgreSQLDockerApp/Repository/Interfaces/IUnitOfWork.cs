@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 
 namespace AspNetCorePostgreSQLDockerApp.Repository
 {
@@ -8,5 +9,7 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
         /// Call save change from db context
         /// </summary>
         void Commit();
+
+        Task<int> CommitAsync();
     }
 }

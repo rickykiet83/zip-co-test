@@ -12,5 +12,6 @@ namespace AspNetCorePostgreSQLDockerApp.Services
         Task<IEnumerable<OrderDto>> CreateOrdersAsync(int customerId, List<Order> orders);
         Task<OrderDto> CancelOrderAsync(int orderId);
         Task<OrderDto> UpdateOrderAsync(OrderForUpdateDto order);
+        Task<int> SaveAsync();
     }
 }

@@ -12,7 +12,7 @@ namespace AspNetCorePostgreSQLDockerApp.Services
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
-        private IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         
         public OrderService(IOrderRepository orderRepository, IMapper mapper, IUnitOfWork unitOfWork)
         {
@@ -66,6 +66,11 @@ namespace AspNetCorePostgreSQLDockerApp.Services
             var result = _mapper.Map<OrderDto>(updatedOrder);
             
             return result; 
+        }
+
+        public Task<int> SaveAsync()
+        {
+            return _unitOfWork.CommitAsync();
         }
     }
 }
