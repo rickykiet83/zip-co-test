@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {IOrder} from "../shared/interfaces";
+import {ICustomerOrders, IOrder} from "../shared/interfaces";
 import {catchError} from "rxjs/operators";
 
 @Injectable()
@@ -10,8 +10,8 @@ export class OrderService {
 
   constructor(private http: HttpClient) {}
 
-  getAllOrders(customerId: number): Observable<IOrder[]> {
-    return this.http.get<IOrder[]>(this.url + `${customerId}/orders`)
+  getAllOrders(customerId: number): Observable<ICustomerOrders> {
+    return this.http.get<ICustomerOrders>(this.url + `${customerId}/orders`)
       .pipe(
         catchError(this.handleError)
       );

@@ -28,3 +28,8 @@ export interface IOrder {
   status: string;
   orderTotal?: number;
 }
+
+export interface ICustomerOrders {
+  customer: Partial<ICustomer>,
+  orders: IOrder[];
+}

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {OrderService} from "../../../core/order.service";
 import {ActivatedRoute} from "@angular/router";
-import {OrderModel} from "../../../shared/order.model";
+import {CustomerOrdersModel} from "../../../shared/customer-orders.model";
 
 @Component({
   selector: 'app-customer-orders',
@@ -9,11 +9,12 @@ import {OrderModel} from "../../../shared/order.model";
   styleUrls: ['./customer-orders.component.css']
 })
 export class CustomerOrdersComponent implements OnInit {
-  orders: OrderModel[];
+  customerOrders: CustomerOrdersModel;
   constructor(private route: ActivatedRoute, private orderService: OrderService) {}
 
   ngOnInit(): void {
-    this.orders = this.route.snapshot.data['orders'];
+    this.customerOrders = this.route.snapshot.data['orders'];
+    console.log(this.customerOrders);
   }
 
 }

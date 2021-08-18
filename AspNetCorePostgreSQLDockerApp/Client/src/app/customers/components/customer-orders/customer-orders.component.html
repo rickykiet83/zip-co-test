@@ -1,4 +1,4 @@
-<h1>customer name's Orders</h1>
+<h1>{{ customerOrders.CustomerModel.fullName }}s Orders</h1>
 <br/>
 
 <div class="navbar">
@@ -23,7 +23,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let order of orders">
+  <tr *ngFor="let order of customerOrders.OrderModels">
     <th scope="row">{{order.id}}</th>
     <td>{{order.product}}</td>
     <td>{{order.price}}</td>
