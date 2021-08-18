@@ -2,14 +2,14 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
 import {Observable} from 'rxjs';
-import {catchError} from 'rxjs/operators';
+import {catchError, map} from 'rxjs/operators';
 
 import {ICustomer} from '../shared/interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DataService {
+export class CustomerService {
 
   private url: string = 'api/customersservice/customers/';
 
@@ -23,10 +23,19 @@ export class DataService {
       );
   }
 
-  updateCustomer(customer: ICustomer) {
+  getCustomer(id: number): Observable<ICustomer> {
+    return this.http.get<ICustomer>(this.url + id)
+      .pipe(
+        catchError(this.handleError),
+        map(result => result)
+      );
+  }
+
+  updateCustomer(customer: ICustomer): Observable<boolean> {
     return this.http.put(this.url + customer.id, customer)
       .pipe(
-        catchError(this.handleError)
+        catchError(this.handleError),
+        map((result: boolean) => result)
       );
   }
 

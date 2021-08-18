@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ICustomer} from "./../../../shared/interfaces";
-import {DataService} from "./../../../core/data.service";
+import {CustomerService} from "../../../core/customer.service";
 
 
 @Component({
@@ -14,16 +14,16 @@ export class CustomersComponent implements OnInit {
   errorMessage: string;
   editViewEnabled = false;
 
-  constructor(private dataService: DataService) {
+  constructor(private customerService: CustomerService) {
   }
 
   ngOnInit() {
-    this.dataService.getCustomersSummary()
+    this.customerService.getCustomersSummary()
       .subscribe((data: ICustomer[]) => this.customers = data);
   }
 
   save(customer: ICustomer) {
-    this.dataService.updateCustomer(customer)
+    this.customerService.updateCustomer(customer)
       .subscribe((status: boolean) => {
         if (status) {
           this.editId = 0;
