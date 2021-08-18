@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
+import {ICustomer} from "./../../../shared/interfaces";
+import {DataService} from "./../../../core/data.service";
 
-import {DataService} from '../core/data.service';
-import {ICustomer} from '../shared/interfaces';
 
 @Component({
   selector: 'app-customers',
