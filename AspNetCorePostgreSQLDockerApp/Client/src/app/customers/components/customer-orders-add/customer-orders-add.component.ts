@@ -34,7 +34,8 @@ export class CustomerOrdersAddComponent implements OnInit {
   }
 
   addOrder() {
-
+    this.addOrderSuccess = false;
+    this.serverError = false;
     const orderForm = this.fb.group({
       product: [null, [
         Validators.required,
