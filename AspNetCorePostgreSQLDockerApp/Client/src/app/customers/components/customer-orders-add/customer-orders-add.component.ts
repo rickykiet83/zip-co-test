@@ -3,6 +3,7 @@ import {ActivatedRoute} from "@angular/router";
 import {CustomerModel, CustomerOrdersModel} from "../../../shared/customer-orders.model";
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ICustomerCreateOrders, IOrder} from "../../../shared/interfaces";
+import {OrderService} from "../../../core/order.service";
 
 @Component({
   selector: 'app-customer-orders-add',
@@ -14,12 +15,15 @@ export class CustomerOrdersAddComponent implements OnInit {
   statusList = ['InProgress', 'Delivered', 'Cancelled'];
 
   orderData: IOrder[] = [];
+  serverError = false;
+  errorMessages: any[];
+  addOrderSuccess = false;
 
   form: FormGroup = this.fb.group({
     orders: this.fb.array([])
   });
 
-  constructor(private route: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(private route: ActivatedRoute, private fb: FormBuilder, private orderService: OrderService) {}
 
   ngOnInit(): void {
     this.customerModel = this.route.snapshot.data['customer'];
@@ -32,9 +36,13 @@ export class CustomerOrdersAddComponent implements OnInit {
   addOrder() {
 
     const orderForm = this.fb.group({
-      product: [null, Validators.required],
-      price: ['', Validators.required],
-      quantity: ['', Validators.required],
+      product: [null, [
+        Validators.required,
+        Validators.minLength(5),
+        Validators.minLength(150),
+      ]],
+      price: [null, Validators.required],
+      quantity: [null, Validators.required],
       status: ['InProgress', Validators.required],
       customerId: [{value: this.customerModel.id, disabled: true}]
     });
@@ -43,15 +51,23 @@ export class CustomerOrdersAddComponent implements OnInit {
   }
 
   onSubmitForm() {
+    this.serverError = false;
     if (this.isFormValid) {
       const customerOrders: ICustomerCreateOrders = {
         customerId: this.customerModel.id,
         orders: this.orders.getRawValue() as IOrder[]
       };
-      console.log(customerOrders);
-
+      this.orderService.createOrders(customerOrders.customerId, customerOrders)
+        .subscribe(result => {
+          this.addOrderSuccess = result;
+          this.orders.clear();
+        },
+          error => {
+            this.serverError = true;
+            this.errorMessages = error.error.errors;
+          }
+        );
     }
-
   }
 
   get isFormValid(): boolean {

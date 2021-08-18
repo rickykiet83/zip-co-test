@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-import {Observable} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
 import {ICustomer} from '../shared/interfaces';
@@ -41,7 +41,7 @@ export class CustomerService {
 
   handleError(error: any) {
     console.error(error);
-    return Observable.throw(error.json().error || 'Server error');
+    return throwError(error || 'Server error');
   }
 
 }

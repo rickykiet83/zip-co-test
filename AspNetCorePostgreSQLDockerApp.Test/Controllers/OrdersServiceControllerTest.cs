@@ -70,7 +70,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Controllers
             var orderDto = new CustomerCreateOrdersDto
             {
                 CustomerId = customer.Id,
-                OrderDtos = orders.Select(o => o.ToCreateDto(customer.Id)).ToList(),
+                Orders = orders.Select(o => o.ToCreateDto(customer.Id)).ToList(),
             };
                 
             var result = controller.CreateOrders(customer.Id, orderDto).Result;
@@ -197,7 +197,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Controllers
             var orderDto = new CustomerCreateOrdersDto
             {
                 CustomerId = customer.Id,
-                OrderDtos = orders.Select(o => o.ToCreateDto(customer.Id)).ToList(),
+                Orders = orders.Select(o => o.ToCreateDto(customer.Id)).ToList(),
             };
             var result = controller.CreateOrders(-1, orderDto).Result;
             result.Should().BeOfType(typeof(NotFoundResult));

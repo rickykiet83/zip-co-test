@@ -19,6 +19,13 @@
 </div>
 
 <div class="container">
+  <div class="row alert-container" *ngIf="addOrderSuccess">
+    <div class="alert alert-success alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+        aria-hidden="true">&times;</span></button>
+      <strong>Well done!</strong> You successfully added new orders.
+    </div>
+  </div>
   <div class="row alert-container" *ngIf="totalInprogressStatus > 4">
     <div class="alert alert-warning alert-dismissible" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
@@ -45,6 +52,17 @@
                          type="text"
                          placeholder="Product (required)"
                          formControlName="product"/>
+                  <span class="invalid-feedback">
+                    <span *ngIf="orderForm.get('product').errors?.required">
+                      Please enter product.
+                    </span>
+                    <span *ngIf="orderForm.get('product').errors?.minlength">
+                      The product must be longer than 5 characters.
+                    </span>
+                    <span *ngIf="orderForm.get('product').errors?.maxlength">
+                      The product must be less than 150 characters.
+                    </span>
+                  </span>
                 </div>
               </div>
               <!--  ./form-group /-->
@@ -101,6 +119,15 @@
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
         aria-hidden="true">&times;</span></button>
       <strong>Warning!</strong> Maximum of 4 InProgress orders for each customer allowed to be stored
+    </div>
+  </div>
+
+  <div class="row alert-container" *ngIf="serverError">
+    <div class="alert alert-danger alert-dismissible" role="alert">
+      <button (click)="serverError = false" type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+        aria-hidden="true">&times;</span></button>
+      <strong>Error!</strong>
+      <p *ngFor="let error of errorMessages">{{error}}</p>
     </div>
   </div>
 

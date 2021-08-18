@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {ICustomerOrders, IOrder} from "../shared/interfaces";
-import {catchError} from "rxjs/operators";
+import {Observable, throwError} from "rxjs";
+import {ICustomerCreateOrders, ICustomerOrders, IOrder} from "../shared/interfaces";
+import {catchError, map} from "rxjs/operators";
 
 @Injectable()
 export class OrderService {
@@ -17,8 +17,17 @@ export class OrderService {
       );
   }
 
+  createOrders(customerId: number, orders: ICustomerCreateOrders): Observable<boolean> {
+    const url = this.url + customerId + '/orders';
+    return this.http.post(url, orders)
+      .pipe(
+        catchError(this.handleError),
+        map(result => result !== null)
+      );
+  }
+
   handleError(error: any) {
     console.error(error);
-    return Observable.throw(error.json().error || 'Server error');
+    return throwError(error || 'Server error');
   }
 }

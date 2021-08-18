@@ -58,7 +58,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Factories
             return new CustomerCreateOrdersDto()
             {
                 CustomerId = customer.Id,
-                OrderDtos = customer.Orders.Select(o => o.ToCreateDto(customer.Id))
+                Orders = customer.Orders.Select(o => o.ToCreateDto(customer.Id))
                     .ToList()
             };
         }

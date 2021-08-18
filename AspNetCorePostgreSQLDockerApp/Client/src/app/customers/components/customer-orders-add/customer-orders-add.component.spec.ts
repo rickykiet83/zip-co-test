@@ -5,11 +5,12 @@ import {of} from "rxjs";
 import {CustomersModule} from "../../customers.module";
 import {RouterTestingModule} from "@angular/router/testing";
 import {ActivatedRoute} from "@angular/router";
-import {CustomerOrdersComponent} from "../customer-orders/customer-orders.component";
+import {OrderService} from "../../../core/order.service";
 
 describe('CustomerOrdersAddComponent', () => {
   let component: CustomerOrdersAddComponent;
   let fixture: ComponentFixture<CustomerOrdersAddComponent>;
+  let orderService: any;
 
   const activatedRouteMock = {
     snapshot: {
@@ -27,6 +28,8 @@ describe('CustomerOrdersAddComponent', () => {
   };
 
   beforeEach(async(() => {
+    const orderServiceSpy = jasmine.createSpyObj('OrderService', ['createOrders', 'getAllOrders'])
+
     TestBed.configureTestingModule({
       imports: [
         CustomersModule,
@@ -34,12 +37,14 @@ describe('CustomerOrdersAddComponent', () => {
       ],
       providers: [
         {provide: ActivatedRoute, useValue: activatedRouteMock},
+        {provide: OrderService, useValue: orderServiceSpy},
       ]
     })
       .compileComponents()
       .then(() => {
         fixture = TestBed.createComponent(CustomerOrdersAddComponent);
         component = fixture.componentInstance;
+        orderService = TestBed.inject(OrderService);
       });
   }));
 

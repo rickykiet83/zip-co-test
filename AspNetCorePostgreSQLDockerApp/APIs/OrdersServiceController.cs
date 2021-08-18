@@ -70,8 +70,8 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
         
         [HttpPost(Name = RouteNames.CreateOrders)]
         [ApiValidationFilter]
-        [ProducesResponseType(typeof(List<OrderForCreationDto>), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(List<OrderForCreationDto>), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(List<OrderDto>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(List<OrderDto>), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> CreateOrders([Required] int customerId, [FromBody]CustomerCreateOrdersDto ordersDto)
         {
             var customer = await _customersRepository.GetCustomerAsync(customerId);
@@ -80,7 +80,7 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
                 _logger.LogInformation($"Customer with orderId: {customer} doesn't exist in the database.");
                 return NotFound();
             }
-            var orderEntities = _mapper.Map<IEnumerable<Order>>(ordersDto.OrderDtos);
+            var orderEntities = _mapper.Map<IEnumerable<Order>>(ordersDto.Orders);
             var orders = await _orderService.CreateOrdersAsync(customerId, orderEntities.ToList());
             return StatusCode(StatusCodes.Status201Created, orders.ToList());
         }

@@ -32,7 +32,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.DtoValidations
         {
             var orders = OrderFactory.Order.Generate(4)
                 .Select(o => o.ToCreateDto(_customerCreateOrdersDto.CustomerId)).ToList();
-            _customerCreateOrdersDto.OrderDtos = orders;
+            _customerCreateOrdersDto.Orders = orders;
             _validatorCustomerCreateOrders = new CustomerCreateOrdersValidator();
             var result = _validatorCustomerCreateOrders.Validate(_customerCreateOrdersDto);
             result.IsValid.Should().BeTrue();
@@ -72,7 +72,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.DtoValidations
         public void Should_Error_Result_When_Orders_IsEmpty()
         {
             _validatorCustomerCreateOrders = new CustomerCreateOrdersValidator();
-            _customerCreateOrdersDto.OrderDtos = new List<OrderForCreationDto>();
+            _customerCreateOrdersDto.Orders = new List<OrderForCreationDto>();
             var result = _validatorCustomerCreateOrders.Validate(_customerCreateOrdersDto);
             result.IsValid.Should().BeFalse();
             result.Errors.ElementAt(0).ErrorMessage.Should().Contain("is required");
@@ -88,7 +88,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.DtoValidations
                 .Select(o => o.ToCreateDto(_customerCreateOrdersDto.CustomerId))
                 .ToList();
 
-            _customerCreateOrdersDto.OrderDtos = orders;
+            _customerCreateOrdersDto.Orders = orders;
             var result = _validatorCustomerCreateOrders.Validate(_customerCreateOrdersDto);
             result.IsValid.Should().BeFalse();
             result.Errors.ElementAt(0).ErrorMessage.Should().Contain("Maximum of 4");

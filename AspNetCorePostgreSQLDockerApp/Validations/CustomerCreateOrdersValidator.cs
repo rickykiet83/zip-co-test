@@ -8,10 +8,10 @@ namespace AspNetCorePostgreSQLDockerApp.Validations
     {
         public CustomerCreateOrdersValidator()
         {
-            RuleForEach(x => x.OrderDtos).SetValidator(new OrderCreateValidator());
+            RuleForEach(x => x.Orders).SetValidator(new OrderCreateValidator());
             RuleFor(x => x.CustomerId)
                 .GreaterThan(0).WithMessage("Customer Id is invalid.");
-            RuleFor(x => x.OrderDtos)
+            RuleFor(x => x.Orders)
                 .NotEmpty().WithMessage("Orders is required.");
             RuleFor(x => x.GetTotalOrderInProgress())
                 .LessThanOrEqualTo(SystemConstants.TotalInProgressAllow)
