@@ -16,6 +16,10 @@ export class CustomerOrdersModel implements ICustomerOrders {
   get CustomerModel(): CustomerModel {
     return new CustomerModel(this.customer?.id, this.customer);
   }
+
+  getTotalSales(): number {
+    return this.OrderModels.reduce((a, b) => a + b.orderTotal, 0);
+  }
 }
 
 export class CustomerModel implements ICustomer {

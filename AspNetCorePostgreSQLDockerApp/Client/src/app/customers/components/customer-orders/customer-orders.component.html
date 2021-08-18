@@ -16,6 +16,10 @@
   </ul>
 </div>
 
+<blockquote>
+  <p class="bg-primary">Total Sales: {{customerOrders.getTotalSales() | currency:'AUD':'symbol'}}</p>
+</blockquote>
+
 <table class="table table-hover">
   <thead>
   <tr>
@@ -31,9 +35,9 @@
   <tr *ngFor="let order of customerOrders.OrderModels">
     <th scope="row">{{order.id}}</th>
     <td>{{order.product}}</td>
-    <td>{{order.price}}</td>
+    <td>{{order.price | currency:'AUD':'symbol'}}</td>
     <td>{{order.quantity}}</td>
-    <td>{{order.orderTotal}}</td>
+    <td>{{order.orderTotal | currency:'AUD':'symbol'}}</td>
     <td>{{order.status}}</td>
   </tr>
   </tbody>
