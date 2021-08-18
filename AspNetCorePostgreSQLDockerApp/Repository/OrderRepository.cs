@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCorePostgreSQLDockerApp.Dtos;
 using AspNetCorePostgreSQLDockerApp.Models;
 using AspNetCorePostgreSQLDockerApp.Models.Abstract;
 using Microsoft.EntityFrameworkCore;
@@ -19,8 +20,9 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
         
         public async Task<IEnumerable<Order>> GetOrdersAsync(int customerId, bool trackChanges = false)
         {
-            var orders = await FindByCondition(o => o.CustomerId.Equals(customerId), trackChanges)
-                .ToListAsync();
+            var orders = await FindByCondition(trackChanges, 
+                o => o.CustomerId.Equals(customerId),
+                o => o.Customer).ToListAsync();
 
             return orders;
         }
