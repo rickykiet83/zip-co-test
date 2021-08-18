@@ -3,7 +3,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {CustomerOrdersComponent} from './customer-orders.component';
 import {CustomersModule} from "../../customers.module";
 import {OrderService} from "../../../core/order.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {of} from "rxjs";
 
 describe('CustomerOrdersComponent', () => {
@@ -46,6 +46,10 @@ describe('CustomerOrdersComponent', () => {
     queryParams: of({id: 1})
   };
 
+  const routerMock = {
+
+  }
+
   beforeEach(async(() => {
     const orderServiceSpy = jasmine.createSpyObj('OrderService', ['getAllOrders'])
 
@@ -56,6 +60,7 @@ describe('CustomerOrdersComponent', () => {
       providers: [
         {provide: OrderService, useValue: orderServiceSpy},
         {provide: ActivatedRoute, useValue: activatedRouteMock},
+        {provide: Router, useValue: routerMock},
       ]
     })
       .compileComponents()

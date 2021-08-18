@@ -7,9 +7,10 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { CustomerOrdersComponent } from './components/customer-orders/customer-orders.component';
 import {OrderResolveService} from "../core/order.resolver";
 import {OrderService} from "../core/order.service";
+import { CustomerOrdersAddComponent } from './components/customer-orders-add/customer-orders-add.component';
 
 @NgModule({
-  declarations: [CustomersComponent, CustomerComponent, CustomerOrdersComponent],
+  declarations: [CustomersComponent, CustomerComponent, CustomerOrdersComponent, CustomerOrdersAddComponent],
   imports: [
     CommonModule,
     FormsModule, ReactiveFormsModule,

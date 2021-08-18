@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {OrderService} from "../../../core/order.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {CustomerOrdersModel} from "../../../shared/customer-orders.model";
 
 @Component({
@@ -15,5 +15,9 @@ export class CustomerOrdersComponent implements OnInit {
   ngOnInit(): void {
     this.customerOrders = this.route.snapshot.data['orders'];
   }
+  //
+  // addOrders(customerId: number) {
+  //   return this.router.navigateByUrl(`/customers/${customerId}/orders/add`);
+  // }
 
 }

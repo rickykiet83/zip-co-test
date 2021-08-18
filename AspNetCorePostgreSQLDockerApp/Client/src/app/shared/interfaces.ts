@@ -26,6 +26,7 @@ export interface IOrder {
   price: number;
   quantity: number;
   status: string;
+  customerId?: number;
   orderTotal?: number;
 }
 

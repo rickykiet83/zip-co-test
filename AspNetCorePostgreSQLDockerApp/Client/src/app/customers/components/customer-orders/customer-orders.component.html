@@ -8,6 +8,11 @@
         <span class="glyphicon glyphicon-align-justify"></span> Customer List
       </a>
     </li>
+    <li class="toolbar-item">
+      <a type="button" [routerLink]="['/customers/' + customerOrders.customer?.id + '/orders/add']" >
+        <span class="glyphicon glyphicon-plus"></span> Add Orders
+      </a>
+    </li>
   </ul>
 </div>
 
@@ -20,7 +25,6 @@
     <th>Quantity</th>
     <th>Total</th>
     <th>Status</th>
-    <th>Action</th>
   </tr>
   </thead>
   <tbody>
@@ -31,9 +35,6 @@
     <td>{{order.quantity}}</td>
     <td>{{order.orderTotal}}</td>
     <td>{{order.status}}</td>
-    <td>
-      <button type="button" class="btn btn-primary">Add Orders</button>
-    </td>
   </tr>
   </tbody>
 </table>

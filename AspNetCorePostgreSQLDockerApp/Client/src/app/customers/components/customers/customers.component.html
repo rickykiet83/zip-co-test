@@ -47,8 +47,8 @@
     </div>
     <div class="col-md-3">
       <div class="btn-group pull-right">
-        <a href="{{customer.id}}/orders" type="button" class="btn btn-secondary">View Orders</a>
-        <a type="button" class="btn btn-secondary">Create Orders</a>
+        <a href="customers/{{customer?.id}}/orders" type="button" class="btn btn-secondary">View Orders</a>
+        <a [routerLink]="['/customers/' + customer?.id + '/orders/add']"  type="button" class="btn btn-secondary">Add Orders</a>
       </div>
     </div>
     <br/>

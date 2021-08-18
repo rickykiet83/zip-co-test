@@ -1,8 +1,8 @@
 import {ICustomer, ICustomerOrders, IOrder, IState} from "./interfaces";
 
 export class CustomerOrdersModel implements ICustomerOrders {
-  customer: Partial<ICustomer>;
-  orders: IOrder[];
+  customer: Partial<ICustomer> = null;
+  orders: IOrder[] = [];
 
   constructor(data?: ICustomerOrders) {
     this.customer = data?.customer || null;
@@ -52,11 +52,13 @@ export class OrderModel implements IOrder {
   product: string;
   quantity: number;
   status: string;
+  customerId: number;
   constructor(public id: number, data?: IOrder) {
     this.price = data?.price || 0;
     this.product = data?.product || '';
     this.quantity = data?.quantity || 0;
     this.status = data?.status || '';
+    this.customerId = data?.customerId || null;
   }
 
   get orderTotal(): number {
