@@ -5,6 +5,7 @@ import {CustomersComponent} from "./components/customers/customers.component";
 import {CustomerOrdersComponent} from "./components/customer-orders/customer-orders.component";
 import {OrderResolveService} from "../core/order.resolver";
 import {CustomerOrdersAddComponent} from "./components/customer-orders-add/customer-orders-add.component";
+import {CustomerResolverService} from "../core/customer-resolver.service";
 
 
 const routes: Routes = [
@@ -31,6 +32,9 @@ const routes: Routes = [
       {
         path: ':id/orders/add',
         component: CustomerOrdersAddComponent,
+        resolve: {
+          customer: CustomerResolverService
+        }
       },
     ]
   }

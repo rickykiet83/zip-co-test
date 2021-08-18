@@ -8,6 +8,7 @@ import { CustomerOrdersComponent } from './components/customer-orders/customer-o
 import {OrderResolveService} from "../core/order.resolver";
 import {OrderService} from "../core/order.service";
 import { CustomerOrdersAddComponent } from './components/customer-orders-add/customer-orders-add.component';
+import {CustomerResolverService} from "../core/customer-resolver.service";
 
 @NgModule({
   declarations: [CustomersComponent, CustomerComponent, CustomerOrdersComponent, CustomerOrdersAddComponent],
@@ -18,7 +19,8 @@ import { CustomerOrdersAddComponent } from './components/customer-orders-add/cus
   ],
   providers:[
     OrderService,
-    OrderResolveService
+    OrderResolveService,
+    CustomerResolverService
   ]
 })
 export class CustomersModule {
