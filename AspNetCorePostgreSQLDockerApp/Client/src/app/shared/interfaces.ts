@@ -34,3 +34,8 @@ export interface ICustomerOrders {
   customer: Partial<ICustomer>,
   orders: IOrder[];
 }
+
+export interface ICustomerCreateOrders {
+  customerId: number,
+  orders: IOrder[],
+}

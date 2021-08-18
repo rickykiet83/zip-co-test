@@ -1,0 +1,107 @@
+<h1>Create Orders for: {{ customerModel?.fullName }}</h1>
+<br/>
+
+<div class="navbar">
+  <ul class="nav navbar-nav">
+    <li class="toolbar-item">
+      <a [routerLink]="['/customers/' + customerModel.id + '/orders']">
+        <span class="glyphicon glyphicon-align-justify"></span> Order List
+      </a>
+    </li>
+
+    <li class="toolbar-item">
+      <button (click)="onSubmitForm()" class="btn btn-primary" [disabled]="!isFormValid">
+        Create Orders
+      </button>
+    </li>
+
+  </ul>
+</div>
+
+<div class="container">
+  <div class="row alert-container" *ngIf="totalInprogressStatus > 4">
+    <div class="alert alert-warning alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+        aria-hidden="true">&times;</span></button>
+      <strong>Warning!</strong> Maximum of 4 InProgress orders for each customer allowed to be stored
+    </div>
+  </div>
+  <div class="row">
+
+    <div class="col-md-6 col-sm-12">
+
+      <div [formGroup]="form">
+
+        <ng-container formArrayName="orders">
+
+          <ng-container *ngFor="let orderForm of orders.controls">
+
+            <div class="container-border-form form-horizontal" [formGroup]="orderForm">
+              <!-- form-group  -->
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Product</label>
+                <div class="col-sm-10">
+                  <input class="form-control"
+                         type="text"
+                         placeholder="Product (required)"
+                         formControlName="product"/>
+                </div>
+              </div>
+              <!--  ./form-group /-->
+
+              <!-- form-group  -->
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Price</label>
+                <div class="col-sm-10">
+                  <input class="form-control"
+                         type="number"
+                         placeholder="Price"
+                         formControlName="price"/>
+                </div>
+              </div>
+              <!--  ./form-group /-->
+              <!-- form-group  -->
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Quantity</label>
+                <div class="col-sm-10">
+                  <input class="form-control"
+                         type="number"
+                         placeholder="Quantity"
+                         formControlName="quantity"/>
+                </div>
+              </div>
+              <!--  ./form-group /-->
+              <!-- form-group  -->
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Status</label>
+                <div class="col-sm-10">
+                  <select id="status" class="custom-select" formControlName="status">
+                    <option [value]="status" *ngFor="let status of statusList">{{status}}</option>
+                  </select>
+                </div>
+              </div>
+              <!--  ./form-group /-->
+
+            </div>
+
+          </ng-container>
+        </ng-container>
+
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <button (click)="onSubmitForm()" class="btn btn-primary" [disabled]="!isFormValid">
+      Create Orders
+    </button>
+    <button (click)="addOrder()" class="btn btn-secondary">Add More</button>
+  </div>
+  <div class="row alert-container" *ngIf="totalInprogressStatus > 4">
+    <div class="alert alert-warning alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+        aria-hidden="true">&times;</span></button>
+      <strong>Warning!</strong> Maximum of 4 InProgress orders for each customer allowed to be stored
+    </div>
+  </div>
+
+</div>
