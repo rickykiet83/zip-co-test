@@ -38,7 +38,7 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
             return resultOrders;
         }
 
-        public async Task<Order> CancelOrderAsync(Order order)
+        public Order CancelOrder(Order order)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
             }
             catch (Exception exp)
             {
-                _logger.LogError($"Error in {nameof(CancelOrderAsync)}: " + exp.Message);
+                _logger.LogError($"Error in {nameof(CancelOrder)}: " + exp.Message);
             }
             
             return order;

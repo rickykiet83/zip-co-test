@@ -57,7 +57,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Repositories
             OrderRepository orderRepository = new OrderRepository(_context, _logger);
             orderRepository.CreateOrders(customer.Id, orders);
             var cancelOrder = orders.ElementAt(0);
-            var result = await orderRepository.CancelOrderAsync(cancelOrder);
+            var result = orderRepository.CancelOrder(cancelOrder);
 
             result.Should().NotBeNull();
             result.Status.Should().Equals(EOrderStatus.Cancelled);

@@ -49,7 +49,7 @@ namespace AspNetCorePostgreSQLDockerApp.Services
             var order = await _orderRepository.GetOrderAsync(orderId);
             if (order == null) return null;
             
-            var canceledOrder = await _orderRepository.CancelOrderAsync(order);
+            var canceledOrder = _orderRepository.CancelOrder(order);
             await SaveAsync();
             var result = _mapper.Map<OrderDto>(canceledOrder);
             
