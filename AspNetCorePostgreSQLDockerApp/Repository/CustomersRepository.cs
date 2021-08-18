@@ -38,6 +38,11 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
                 .ToListAsync();
         }
 
+        public async Task<List<Customer>> SearchCustomerByEmail(string email)
+        {
+            return await FindByCondition(c => c.Email.ToLower().Contains(email.ToLower())).ToListAsync();
+        }
+
         public async Task<Customer> InsertCustomerAsync(Customer customer)
         {
             Create(customer);

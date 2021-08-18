@@ -29,6 +29,19 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
 
             return Ok(customers);
         }
+        
+        [HttpGet("search")]
+        [ProducesResponseType(typeof(List<Customer>), 200)]
+        [ProducesResponseType(typeof(List<Customer>), 404)]
+        public async Task<ActionResult> SearchCustomers([FromQuery] string email)
+        {
+            if (string.IsNullOrEmpty(email)) return BadRequest("Please Input Email");
+            
+            var customers = await _repo.SearchCustomerByEmail(email);
+            if (customers == null) return NotFound();
+
+            return Ok(customers);
+        }
 
         // GET api/dataservice/customers/5
         [HttpGet("{id}", Name = "GetCustomersRoute")]

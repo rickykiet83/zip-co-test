@@ -14,5 +14,6 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
         Task<bool> UpdateCustomerAsync(Customer customer);
         Task<bool> DeleteCustomerAsync(int id);
         Task<List<State>> GetStatesAsync(bool trackChanges = false);
+        Task<List<Customer>> SearchCustomerByEmail(string email);
     }
 }
