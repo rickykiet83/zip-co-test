@@ -23,6 +23,14 @@ export class CustomerService {
       );
   }
 
+  searchCustomersByKeyword(keyword: string): Observable<ICustomer[]> {
+    const url = this.url + 'search?email=' + keyword;
+    return this.http.get<ICustomer[]>(url)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
   getCustomer(id: number): Observable<ICustomer> {
     return this.http.get<ICustomer>(this.url + id)
       .pipe(

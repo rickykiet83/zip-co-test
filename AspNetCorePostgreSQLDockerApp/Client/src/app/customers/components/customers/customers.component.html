@@ -17,6 +17,18 @@
   </ul>
 </div>
 
+<div class="row">
+  <form class="navbar-form navbar-left" role="search">
+    <div class="form-group">
+      <input #filter type="text"
+             (keyup.escape)="onKeywordChange('')"
+             (keyup.enter)="onSearchByKeyword()"
+             (keyup)="onKeywordChange($event.target.value)" class="form-control" placeholder="Search By Email">
+    </div>
+    <button (click)="onSearchByKeyword()" type="button" class="btn btn-default btn-search">Search</button>
+  </form>
+</div>
+
 <div *ngIf="!editViewEnabled">
   <div class="row header-row">
     <div class="col-md-2">

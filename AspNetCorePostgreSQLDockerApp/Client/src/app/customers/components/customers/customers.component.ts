@@ -5,6 +5,7 @@ import {CustomerService} from "../../../core/customer.service";
 
 @Component({
   selector: 'app-customers',
+  styleUrls: ['./customers.component.css'],
   templateUrl: 'customers.component.html'
 })
 export class CustomersComponent implements OnInit {
@@ -13,6 +14,7 @@ export class CustomersComponent implements OnInit {
   editId: number = 0;
   errorMessage: string;
   editViewEnabled = false;
+  keyword: string;
 
   constructor(private customerService: CustomerService) {
   }
@@ -31,6 +33,16 @@ export class CustomersComponent implements OnInit {
           this.errorMessage = 'Unable to save customer';
         }
       })
+  }
+
+  onKeywordChange(keyword: string) {
+    this.keyword = keyword;
+  }
+
+  onSearchByKeyword() {
+    console.log(this.keyword);
+    this.customerService.searchCustomersByKeyword(this.keyword)
+      .subscribe((data: ICustomer[]) => this.customers = data);
   }
 
 }
