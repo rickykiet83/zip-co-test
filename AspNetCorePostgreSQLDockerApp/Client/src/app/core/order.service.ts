@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {ICustomer, IOrder} from "../shared/interfaces";
+import {IOrder} from "../shared/interfaces";
 import {catchError} from "rxjs/operators";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class OrderService {
   private url: string = 'api/customers/';
 
