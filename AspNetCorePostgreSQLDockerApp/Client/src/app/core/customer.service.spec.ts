@@ -59,7 +59,7 @@ describe("CustomerService", () => {
     req.flush(Object.values(customers));
   });
 
-  fit('should update a customer', () => {
+  it('should update a customer', () => {
     const change: ICustomer = {
       id: customers[0].id,
       firstName: "Test",
