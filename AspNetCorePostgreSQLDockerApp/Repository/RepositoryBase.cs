@@ -39,7 +39,7 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
         public IQueryable<T> FindByCondition(bool trackChange, Expression<Func<T, bool>> expression,
             params Expression<Func<T, object>>[] includeProperties)
         {
-            IQueryable<T> items = _dbContext.Set<T>();
+            IQueryable<T> items = _dbContext.Set<T>().Where(expression);
             if (!trackChange) items.AsNoTracking();
 
             if (includeProperties == null) return items;
