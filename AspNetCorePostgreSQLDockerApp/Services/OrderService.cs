@@ -25,10 +25,13 @@ namespace AspNetCorePostgreSQLDockerApp.Services
             var customer = orders.FirstOrDefault().Customer;
             var result = new CustomerOrdersDto
             {
-                CustomerId = customerId,
-                FirstName = customer.FirstName,
-                LastName = customer.LastName,
-                Email = customer.Email,
+                Customer = new CustomerDto
+                {
+                    Id = customerId,
+                    FirstName = customer.FirstName,
+                    LastName = customer.LastName,
+                    Email = customer.Email,
+                },
                 Orders = orderDtos.ToList()
             };
             return result;
