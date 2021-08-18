@@ -41,7 +41,7 @@
 
         <ng-container formArrayName="orders">
 
-          <ng-container *ngFor="let orderForm of orders.controls">
+          <ng-container *ngFor="let orderForm of orders.controls; let idx = index" [formGroupName]="idx">
 
             <div class="container-border-form form-horizontal" [formGroup]="orderForm">
               <!-- form-group  -->
@@ -75,6 +75,11 @@
                          type="number"
                          placeholder="Price"
                          formControlName="price"/>
+                  <span class="invalid-feedback">
+                    <span *ngIf="orderForm.get('price').errors?.required">
+                      Please enter price.
+                    </span>
+                  </span>
                 </div>
               </div>
               <!--  ./form-group /-->
@@ -86,6 +91,11 @@
                          type="number"
                          placeholder="Quantity"
                          formControlName="quantity"/>
+                  <span class="invalid-feedback">
+                    <span *ngIf="orderForm.get('quantity').errors?.required">
+                      Please enter quantity.
+                    </span>
+                  </span>
                 </div>
               </div>
               <!--  ./form-group /-->
@@ -100,6 +110,11 @@
               </div>
               <!--  ./form-group /-->
 
+              <div class="row" *ngIf="canRemoveOrder">
+                <button (click)="removeOrder(idx)" class="btn btn-default">
+                  Cancel <span class="badge">{{idx+1}}</span>
+                </button>
+              </div>
             </div>
 
           </ng-container>

@@ -22,33 +22,50 @@ export class CustomerOrdersAddComponent implements OnInit {
   form: FormGroup = this.fb.group({
     orders: this.fb.array([])
   });
+  orderForm: FormGroup;
 
-  constructor(private route: ActivatedRoute, private fb: FormBuilder, private orderService: OrderService) {}
+  constructor(private route: ActivatedRoute, private fb: FormBuilder, private orderService: OrderService) {
+    this.initForm();
+  }
 
   ngOnInit(): void {
     this.customerModel = this.route.snapshot.data['customer'];
+    this.addOrder();
   }
 
   get orders(): FormArray {
     return this.form.controls['orders'] as FormArray;
   }
 
-  addOrder() {
-    this.addOrderSuccess = false;
-    this.serverError = false;
-    const orderForm = this.fb.group({
+  initForm(): FormGroup {
+    return this.orderForm = this.fb.group({
       product: [null, [
         Validators.required,
         Validators.minLength(5),
         Validators.minLength(150),
       ]],
-      price: [null, Validators.required],
+      price: [0, Validators.required],
       quantity: [null, Validators.required],
       status: ['InProgress', Validators.required],
       customerId: [{value: this.customerModel.id, disabled: true}]
     });
+  }
 
+  addOrder() {
+    this.addOrderSuccess = false;
+    this.serverError = false;
+
+    const orderForm = this.initForm();
     this.orders.push(orderForm);
+  }
+
+  removeOrder(idx: number) {
+    if (this.canRemoveOrder)
+      this.orders.removeAt(idx);
+  }
+
+  get canRemoveOrder(): boolean {
+    return this.orders.length > 1;
   }
 
   onSubmitForm() {
