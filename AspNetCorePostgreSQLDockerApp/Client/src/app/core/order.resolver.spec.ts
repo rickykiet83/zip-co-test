@@ -13,7 +13,7 @@ describe('OrderResolveService', () => {
       imports: [
         HttpClientTestingModule
       ],
-      providers: [OrderResolveService]
+      providers: [OrderResolveService, OrderService]
     });
     service = TestBed.inject(OrderResolveService);
     httpTestingController = TestBed.inject(HttpTestingController);

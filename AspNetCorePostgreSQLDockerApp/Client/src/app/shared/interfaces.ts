@@ -21,8 +21,10 @@ export interface IState {
 }
 
 export interface IOrder {
+  id: number;
   product: string;
   price: number;
   quantity: number;
+  status: string;
   orderTotal?: number;
 }
