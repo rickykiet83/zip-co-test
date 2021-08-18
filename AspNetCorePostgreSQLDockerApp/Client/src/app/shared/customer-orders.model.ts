@@ -45,7 +45,6 @@ export class CustomerModel implements ICustomer {
   get fullName(): string {
     return this.firstName + ' ' + this.lastName;
   }
-
 }
 
 export class OrderModel implements IOrder {

@@ -4,7 +4,7 @@ import {CustomerOrdersComponent} from './customer-orders.component';
 import {CustomersModule} from "../../customers.module";
 import {OrderService} from "../../../core/order.service";
 import {ActivatedRoute} from "@angular/router";
-import {Observable, of} from "rxjs";
+import {of} from "rxjs";
 
 describe('CustomerOrdersComponent', () => {
   let component: CustomerOrdersComponent;
@@ -14,14 +14,22 @@ describe('CustomerOrdersComponent', () => {
   const activatedRouteMock = {
     snapshot: {
       data: {
-        courses: [
+        customer: {
+          "id": 1,
+          "firstName": "Pinal",
+          "lastName": "Dave",
+          "email": "Pinal.Dave@gmail.com",
+          "fullName": "Pinal Dave"
+        },
+        orders: [
           {
             "id": 96,
             "product": "Needes",
             "quantity": 1,
             "price": 5.99,
             "customerId": 1,
-            "status": "InProgress"
+            "status": "InProgress",
+            "orderTotal": 5.99
           },
           {
             "id": 97,
@@ -29,6 +37,7 @@ describe('CustomerOrdersComponent', () => {
             "quantity": 1,
             "price": 499.99,
             "customerId": 1,
+            "orderTotal": 499.99,
             "status": "InProgress"
           },
         ],

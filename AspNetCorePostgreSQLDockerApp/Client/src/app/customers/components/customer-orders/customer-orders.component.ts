@@ -14,7 +14,6 @@ export class CustomerOrdersComponent implements OnInit {
 
   ngOnInit(): void {
     this.customerOrders = this.route.snapshot.data['orders'];
-    console.log(this.customerOrders);
   }
 
 }
