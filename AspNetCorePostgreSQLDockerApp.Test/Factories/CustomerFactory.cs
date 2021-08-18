@@ -10,7 +10,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Factories
 {
     public static class CustomerFactory
     {
-        private static readonly List<string> _genders = new List<string>{"Male", "Female"};
+        private static readonly List<string> _genders = new List<string> { "Male", "Female" };
 
         public static readonly Faker<Customer> Customer = new Faker<Customer>()
             .StrictMode(true)
@@ -29,9 +29,8 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Factories
             .RuleFor(o => o.Address, f => f.Address.StreetAddress())
             .RuleFor(o => o.City, f => f.Address.City())
             .RuleFor(o => o.Orders, new List<Order>())
-            .RuleFor(o => o.OrderCount, 0)
-            ;
-        
+            .RuleFor(o => o.OrderCount, 0);
+
         public static Customer AddIndexKey(this Customer customer)
         {
             return Customer
@@ -43,12 +42,23 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Factories
             return Customer.RuleFor(c => c.Orders, orders);
         }
 
+        public static CustomerDto ToDto(this Customer customer)
+        {
+            return new CustomerDto()
+            {
+                Id = customer.Id,
+                Email = customer.Email,
+                FirstName = customer.FirstName,
+                LastName = customer.LastName,
+            };
+        }
+
         public static CustomerCreateOrdersDto ToCreateOrderDtos(this Customer customer)
         {
             return new CustomerCreateOrdersDto()
             {
                 CustomerId = customer.Id,
-                OrderDtos =  customer.Orders.Select(o => o.ToCreateDto(customer.Id))
+                OrderDtos = customer.Orders.Select(o => o.ToCreateDto(customer.Id))
                     .ToList()
             };
         }

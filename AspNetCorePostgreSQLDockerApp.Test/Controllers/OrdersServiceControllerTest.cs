@@ -56,8 +56,13 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Controllers
 
             var mockOrderService = new Mock<IOrderService>();
             var orderDtos = orders.Select(o => o.ToDto(customer.Id));
+            var customerOrdersDto = new CustomerOrdersDto
+            {
+                Customer = customer.ToDto(),
+                Orders = orderDtos.ToList()
+            };
             mockOrderService.Setup(x => x.GetOrdersAsync(customer.Id, false))
-                .ReturnsAsync(orderDtos);
+                .ReturnsAsync(customerOrdersDto);
 
             var controller =
                 new OrdersServiceController(mockOrderService.Object, _mapper, _customerRepoMock.Object, _loggerMock.Object);
@@ -89,8 +94,13 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Controllers
             
             var mockOrderService = new Mock<IOrderService>();
             var orderDtos = orders.Select(o => o.ToDto(customer.Id));
+            var customerOrdersDto = new CustomerOrdersDto
+            {
+                Customer = customer.ToDto(),
+                Orders = orderDtos.ToList()
+            };
             mockOrderService.Setup(x => x.GetOrdersAsync(customer.Id, false))
-                .ReturnsAsync(orderDtos);
+                .ReturnsAsync(customerOrdersDto);
         
             var controller =
                 new OrdersServiceController(mockOrderService.Object, _mapper, _customerRepoMock.Object, _loggerMock.Object);
@@ -174,8 +184,13 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Controllers
                 .ReturnsAsync(orders);
             
             var mockOrderService = new Mock<IOrderService>();
+            var customerOrdersDto = new CustomerOrdersDto
+            {
+                Customer = customer.ToDto(),
+                Orders = orders.Select(o => o.ToDto(customer.Id)).ToList()
+            };
             mockOrderService.Setup(x => x.GetOrdersAsync(customer.Id, false))
-                .ReturnsAsync(orders.Select(o => o.ToDto(customer.Id)));
+                .ReturnsAsync(customerOrdersDto);
         
             var controller =
                 new OrdersServiceController(mockOrderService.Object, _mapper, _customerRepoMock.Object, _loggerMock.Object);
