@@ -2,39 +2,13 @@ import {TestBed} from "@angular/core/testing";
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
 import {CustomerService} from "./customer.service";
 import {ICustomer} from "../shared/interfaces";
+import {CUSTOMERS} from "../../common/customer-data";
 
 describe("CustomerService", () => {
   let customerService: CustomerService,
     httpTestingController: HttpTestingController;
 
-  const customers: any = [
-    {
-      "id": 15,
-      "firstName": "Michelle",
-      "lastName": "Avery",
-      "email": "Michelle.Avery@acmecorp.com",
-      "address": "346 Cedar Ave.",
-      "city": "Dallas",
-      "state": null,
-      "zip": 85237,
-      "gender": "Female",
-      "orderCount": 7,
-      "orders": null
-    },
-    {
-      "id": 22,
-      "firstName": "Ward",
-      "lastName": "Bell",
-      "email": "Ward.Bell@gmail.com",
-      "address": "12 Ocean View St.",
-      "city": "Dallas",
-      "state": null,
-      "zip": 85233,
-      "gender": "Male",
-      "orderCount": 10,
-      "orders": null
-    },
-  ];
+  const customers = CUSTOMERS;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -56,6 +30,7 @@ describe("CustomerService", () => {
 
     const req = httpTestingController.expectOne('api/customersservice/customers/');
     expect(req.request.method).toEqual('GET');
+
     req.flush(Object.values(customers));
   });
 

@@ -9,6 +9,7 @@ import {ICustomer} from "../../../shared/interfaces";
 import {RouterTestingModule} from "@angular/router/testing";
 import {log} from "util";
 import {click} from "../../../../common/test-utils";
+import {CUSTOMERS} from "../../../../common/customer-data";
 
 describe('CustomersComponent', () => {
   let fixture: ComponentFixture<CustomersComponent>;
@@ -16,42 +17,11 @@ describe('CustomersComponent', () => {
   let el: DebugElement;
   let customerService: any;
 
-  const allCustomers: ICustomer[] = [
-    {
-      id: 1,
-      firstName: "Michelle 123",
-      lastName: "Avery",
-      email: "Michelle.Avery@acmecorp.com",
-      address: "346 Cedar Ave.",
-      city: "Dallas",
-      state: null,
-      zip: 85237,
-      gender: "Female",
-      orderCount: 7,
-      orders: null,
-      latitude: 0,
-      longitude: 0
-    },
-    {
-      id: 2,
-      firstName: "Ward",
-      "lastName": "Bell",
-      "email": "Ward.Bell@gmail.com",
-      "address": "12 Ocean View St.",
-      "city": "Dallas",
-      "state": null,
-      "zip": 85233,
-      "gender": "Male",
-      "orderCount": 11,
-      "orders": null,
-      latitude: 0,
-      longitude: 0
-    },
-  ];
+  const customers = CUSTOMERS;
 
   beforeEach(async(() => {
 
-    const customerServiceSpy = jasmine.createSpyObj('CustomerService', ['searchCustomersByKeyword','getCustomersSummary', 'updateCustomer']);
+    const customerServiceSpy = jasmine.createSpyObj('CustomerService', ['searchCustomersByKeyword', 'getCustomersSummary', 'updateCustomer']);
 
     TestBed.configureTestingModule({
       imports: [
@@ -79,11 +49,11 @@ describe('CustomersComponent', () => {
 
   it("should display the customer list", () => {
 
-    customerService.getCustomersSummary.and.returnValue(of(allCustomers));
+    customerService.getCustomersSummary.and.returnValue(of(customers));
 
     fixture.detectChanges();
 
-    component.customers = allCustomers;
+    component.customers = customers;
     expect(component.customers).toBeTruthy();
     expect(component.customers.length >= 2);
 
@@ -101,8 +71,8 @@ describe('CustomersComponent', () => {
 
   it('should display customers with filtered email', fakeAsync(() => {
 
-    const email = allCustomers[0].email;
-    const filteredCustomers = allCustomers.filter(c => c.email === email);
+    const email = customers[0].email;
+    const filteredCustomers = customers.filter(c => c.email === email);
     component.keyword = email;
 
     spyOn(component, 'onSearchByKeyword');
@@ -127,7 +97,4 @@ describe('CustomersComponent', () => {
     expect(component.customers).toEqual(filteredCustomers);
     expect(inputText.textContent).toContain(email);
   }));
-
-
-
 })
