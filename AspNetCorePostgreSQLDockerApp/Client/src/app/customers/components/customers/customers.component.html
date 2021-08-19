@@ -20,12 +20,12 @@
 <div class="row">
   <form class="navbar-form navbar-left" role="search">
     <div class="form-group">
-      <input #filter type="text"
+      <input #filter type="text" id="input-search"
              (keyup.escape)="onKeywordChange('')"
              (keyup.enter)="onSearchByKeyword()"
              (keyup)="onKeywordChange($event.target.value)" class="form-control" placeholder="Search By Email">
     </div>
-    <button (click)="onSearchByKeyword()" type="button" class="btn btn-default btn-search">Search</button>
+    <button id="btn-search" (click)="onSearchByKeyword()" type="button" class="btn btn-default btn-search">Search</button>
   </form>
 </div>
 

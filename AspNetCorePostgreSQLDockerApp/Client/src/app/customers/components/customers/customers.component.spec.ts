@@ -1,12 +1,14 @@
-import {async, ComponentFixture, TestBed} from "@angular/core/testing";
+import {async, ComponentFixture, flush, TestBed} from "@angular/core/testing";
 import {CustomersComponent} from "./customers.component";
-import {DebugElement} from "@angular/core";
+import {DebugElement, Input} from "@angular/core";
 import {CustomerService} from "../../../core/customer.service";
 import {CustomersModule} from "../../customers.module";
 import {of} from "rxjs";
 import {By} from "@angular/platform-browser";
 import {ICustomer} from "../../../shared/interfaces";
 import {RouterTestingModule} from "@angular/router/testing";
+import {log} from "util";
+import {click} from "../../../../common/test-utils";
 
 describe('CustomersComponent', () => {
   let fixture: ComponentFixture<CustomersComponent>;
@@ -49,7 +51,7 @@ describe('CustomersComponent', () => {
 
   beforeEach(async(() => {
 
-    const customerServiceSpy = jasmine.createSpyObj('CustomerService', ['getCustomersSummary', 'updateCustomer', 'searchCustomersByKeyword']);
+    const customerServiceSpy = jasmine.createSpyObj('CustomerService', ['searchCustomersByKeyword','getCustomersSummary', 'updateCustomer']);
 
     TestBed.configureTestingModule({
       imports: [
@@ -87,6 +89,23 @@ describe('CustomersComponent', () => {
     expect(component.customers.length >= 2);
 
   });
+
+  it('should display on customer with filter email', () => {
+    const email = 'Michelle.Avery@acmecorp.com';
+    const filteredCustomers = customers.filter(c => c.email === email);
+
+
+    el.query(By.css('#input-search')).nativeElement.textContent = email;
+    const searchButton = el.query(By.css('#btn-search'));
+    click(searchButton);
+
+    customerService.searchCustomersByKeyword.and.returnValue(of(filteredCustomers));
+    fixture.detectChanges();
+
+    flush();
+
+
+  })
 
 
 })
