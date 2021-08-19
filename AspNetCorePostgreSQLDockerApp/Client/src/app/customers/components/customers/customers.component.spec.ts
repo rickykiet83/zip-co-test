@@ -77,7 +77,6 @@ describe('CustomersComponent', () => {
 
   });
 
-
   it("should display the customer list", () => {
 
     customerService.getCustomersSummary.and.returnValue(of(allCustomers));
@@ -90,8 +89,19 @@ describe('CustomersComponent', () => {
 
   });
 
-  fit('should display customers with filter email', fakeAsync(() => {
-    const email = 'Michelle.Avery@acmecorp.com';
+  it('should click Search button', fakeAsync(() => {
+
+    spyOn(component, 'onSearchByKeyword');
+    const searchButton = el.query(By.css('#btn-search')).nativeElement;
+    searchButton.click();
+
+    flush();
+    expect(component.onSearchByKeyword).toHaveBeenCalled();
+  }));
+
+  it('should display customers with filtered email', fakeAsync(() => {
+
+    const email = allCustomers[0].email;
     const filteredCustomers = allCustomers.filter(c => c.email === email);
     component.keyword = email;
 
@@ -107,13 +117,17 @@ describe('CustomersComponent', () => {
     const searchButton = el.query(By.css('#btn-search')).nativeElement;
     searchButton.click();
 
-    customerService.searchCustomersByKeyword.and.returnValue(of(filteredCustomers));
     fixture.detectChanges();
 
+    customerService.searchCustomersByKeyword.and.returnValue(of(filteredCustomers));
+
+    fixture.detectChanges();
     flush();
-    expect(component.onSearchByKeyword).toHaveBeenCalled();
+
     expect(component.customers).toEqual(filteredCustomers);
+    expect(inputText.textContent).toContain(email);
   }));
+
 
 
 })
