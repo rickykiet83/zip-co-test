@@ -18,7 +18,7 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
             _repo = repo;
         }
 
-        // GET api/dataservice/customers
+        // GET api/CustomersService/customers
         [HttpGet]
         [ProducesResponseType(typeof(List<Customer>), 200)]
         [ProducesResponseType(typeof(List<Customer>), 404)]
@@ -43,7 +43,7 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
             return Ok(customers);
         }
 
-        // GET api/dataservice/customers/5
+        // GET api/CustomersService/customers/5
         [HttpGet("{id}", Name = "GetCustomersRoute")]
         [ProducesResponseType(typeof(Customer), 200)]
         [ProducesResponseType(typeof(Customer), 404)]
@@ -55,7 +55,7 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
             return Ok(customer);
         }
 
-        // POST api/customers
+        // POST api/CustomersService/customers
         [HttpPost]
         [ProducesResponseType(typeof(Customer), 201)]
         [ProducesResponseType(typeof(string), 400)]
@@ -69,7 +69,7 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
             return CreatedAtRoute("GetCustomersRoute", new { id = newCustomer.Id }, newCustomer);
         }
 
-        // PUT api/dataservice/customers/5
+        // PUT api/CustomersService/customers/5
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(bool), 200)]
         [ProducesResponseType(typeof(bool), 400)]
@@ -83,7 +83,7 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
             return Ok(status);
         }
 
-        // DELETE api/dataservice/customers/5
+        // DELETE api/CustomersService/customers/5
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(bool), 200)]
         [ProducesResponseType(typeof(bool), 404)]

@@ -8,17 +8,19 @@
         <span class="glyphicon glyphicon-align-justify"></span> Order List
       </a>
     </li>
-
-    <li class="toolbar-item">
-      <button (click)="onSubmitForm()" class="btn btn-primary" [disabled]="!isFormValid">
-        Create Orders
-      </button>
-    </li>
-
   </ul>
 </div>
 
 <div class="container">
+  <div class="row">
+    <button (click)="onSubmitForm()" class="btn btn-primary" [disabled]="!isFormValid">
+      Create Orders
+    </button>
+    <button [routerLink]="['/customers/' + customerModel.id + '/orders']"  class="btn btn-secondary">
+      Cancel
+    </button>
+  </div>
+
   <div class="row alert-container" *ngIf="addOrderSuccess">
     <div class="alert alert-success alert-dismissible" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span

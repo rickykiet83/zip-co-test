@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AspNetCorePostgreSQLDockerApp.Dtos;
 using AspNetCorePostgreSQLDockerApp.Helpers;
 using AspNetCorePostgreSQLDockerApp.Models;
-using AspNetCorePostgreSQLDockerApp.Repository;
 using AspNetCorePostgreSQLDockerApp.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -15,13 +14,13 @@ using Microsoft.Extensions.Logging;
 namespace AspNetCorePostgreSQLDockerApp.Apis
 {
     [Route("api/customers/{customerId}/orders")]
-    public class OrdersServiceController : ControllerBase
+    public class CustomerOrdersServiceController : ControllerBase
     {
         private readonly IOrderService _orderService;
-        private readonly ILogger<OrdersServiceController> _logger;
+        private readonly ILogger<CustomerOrdersServiceController> _logger;
         private readonly IMapper _mapper;
         
-        public OrdersServiceController(IOrderService orderService, IMapper mapper, ILogger<OrdersServiceController> logger)
+        public CustomerOrdersServiceController(IOrderService orderService, IMapper mapper, ILogger<CustomerOrdersServiceController> logger)
         {
             _orderService = orderService;
             _mapper = mapper;
