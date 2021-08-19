@@ -14,7 +14,7 @@ export class CustomersComponent implements OnInit {
   editId: number = 0;
   errorMessage: string;
   editViewEnabled = false;
-  keyword: string;
+  keyword = '';
 
   constructor(private customerService: CustomerService) {
   }
@@ -40,7 +40,6 @@ export class CustomersComponent implements OnInit {
   }
 
   onSearchByKeyword() {
-    console.log(this.keyword);
     this.customerService.searchCustomersByKeyword(this.keyword)
       .subscribe((data: ICustomer[]) => this.customers = data);
   }

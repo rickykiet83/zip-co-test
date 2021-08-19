@@ -1,4 +1,4 @@
-import {async, ComponentFixture, flush, TestBed} from "@angular/core/testing";
+import {async, ComponentFixture, fakeAsync, flush, TestBed} from "@angular/core/testing";
 import {CustomersComponent} from "./customers.component";
 import {DebugElement, Input} from "@angular/core";
 import {CustomerService} from "../../../core/customer.service";
@@ -16,7 +16,7 @@ describe('CustomersComponent', () => {
   let el: DebugElement;
   let customerService: any;
 
-  const customers: ICustomer[] = [
+  const allCustomers: ICustomer[] = [
     {
       id: 1,
       firstName: "Michelle 123",
@@ -80,32 +80,40 @@ describe('CustomersComponent', () => {
 
   it("should display the customer list", () => {
 
-    customerService.getCustomersSummary.and.returnValue(of(customers));
+    customerService.getCustomersSummary.and.returnValue(of(allCustomers));
 
     fixture.detectChanges();
 
-    component.customers = customers;
+    component.customers = allCustomers;
     expect(component.customers).toBeTruthy();
     expect(component.customers.length >= 2);
 
   });
 
-  it('should display on customer with filter email', () => {
+  fit('should display customers with filter email', fakeAsync(() => {
     const email = 'Michelle.Avery@acmecorp.com';
-    const filteredCustomers = customers.filter(c => c.email === email);
+    const filteredCustomers = allCustomers.filter(c => c.email === email);
+    component.keyword = email;
 
+    spyOn(component, 'onSearchByKeyword');
 
-    el.query(By.css('#input-search')).nativeElement.textContent = email;
-    const searchButton = el.query(By.css('#btn-search'));
-    click(searchButton);
+    customerService.getCustomersSummary.and.returnValue(of(filteredCustomers));
+
+    fixture.detectChanges();
+
+    let inputText = el.query(By.css('#input-search')).nativeElement;
+    inputText.textContent = email;
+
+    const searchButton = el.query(By.css('#btn-search')).nativeElement;
+    searchButton.click();
 
     customerService.searchCustomersByKeyword.and.returnValue(of(filteredCustomers));
     fixture.detectChanges();
 
     flush();
-
-
-  })
+    expect(component.onSearchByKeyword).toHaveBeenCalled();
+    expect(component.customers).toEqual(filteredCustomers);
+  }));
 
 
 })

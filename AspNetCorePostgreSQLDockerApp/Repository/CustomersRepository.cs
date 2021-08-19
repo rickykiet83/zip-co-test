@@ -40,6 +40,9 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
 
         public async Task<List<Customer>> SearchCustomerByEmail(string email)
         {
+            if (string.IsNullOrEmpty(email))
+                return await FindAll(false).ToListAsync();
+            
             return await FindByCondition(c => c.Email.ToLower().Contains(email.ToLower())).ToListAsync();
         }
 

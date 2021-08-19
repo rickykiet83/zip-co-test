@@ -35,8 +35,6 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
         [ProducesResponseType(typeof(List<Customer>), 404)]
         public async Task<ActionResult> SearchCustomers([FromQuery] string email)
         {
-            if (string.IsNullOrEmpty(email)) return BadRequest("Please Input Email");
-            
             var customers = await _repo.SearchCustomerByEmail(email);
             if (customers == null) return NotFound();
 
