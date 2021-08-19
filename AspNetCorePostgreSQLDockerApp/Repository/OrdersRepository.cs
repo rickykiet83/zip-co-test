@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using AspNetCorePostgreSQLDockerApp.Dtos;
 using AspNetCorePostgreSQLDockerApp.Models;
 using AspNetCorePostgreSQLDockerApp.Models.Abstract;
 using Microsoft.EntityFrameworkCore;
@@ -10,17 +8,17 @@ using Microsoft.Extensions.Logging;
 
 namespace AspNetCorePostgreSQLDockerApp.Repository
 {
-    public class OrderRepository : RepositoryBase<Order, int>, IOrderRepository
+    public class OrdersRepository : RepositoryBase<Order, int>, IOrdersRepository
     {
         private readonly ILogger _logger;
-        public OrderRepository(CustomersDbContext context, ILoggerFactory loggerFactory) : base(context)
+        public OrdersRepository(CustomersDbContext context, ILoggerFactory loggerFactory) : base(context)
         {
-            _logger = loggerFactory.CreateLogger("OrderRepository");
+            _logger = loggerFactory.CreateLogger("OrdersRepository");
         }
         
-        public async Task<IEnumerable<Order>> GetOrdersAsync(int customerId, bool trackChanges = false)
+        public async Task<IEnumerable<Order>> GetOrdersAsync(int customerId, bool trackChange = false)
         {
-            var orders = await FindByCondition(trackChanges, 
+            var orders = await FindByCondition(trackChange, 
                 o => o.CustomerId.Equals(customerId),
                 o => o.Customer).ToListAsync();
 
@@ -55,7 +53,7 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
             return order;
         }
 
-        public async Task<Order> GetOrderAsync(int orderId, bool trackChanges = false)
+        public async Task<Order> GetOrderAsync(int orderId, bool trackChange = false)
         {
             return await FindByIdAsync(orderId);
         }

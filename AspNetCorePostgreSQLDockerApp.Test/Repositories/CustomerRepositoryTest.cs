@@ -63,19 +63,6 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Repositories
         }
 
         [Fact]
-        public void FindById_Should_Return_True_Record_In_Table()
-        {
-            CustomersRepository repository = new CustomersRepository(_context, _logger, _stateRepository);
-            var customer = CustomerFactory.Customer.Generate();
-            repository.Create(customer);
-            _unitOfWork.Commit();
-
-            var result = repository.FindByCondition(x => x.Id.Equals(customer.Id), false).SingleOrDefault();
-            result.Should().NotBeNull();
-            result.Id.Should().Equals(customer.Id);
-        }
-
-        [Fact]
         public void Update_Should_Have_Change_Record()
         {
             CustomersRepository repository = new CustomersRepository(_context, _logger, _stateRepository);

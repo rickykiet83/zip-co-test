@@ -10,17 +10,19 @@ namespace AspNetCorePostgreSQLDockerApp.Services
 {
     public class OrderService : ApplicationService<Order, OrderDto, OrderForCreationDto, OrderForUpdateDto, int>, IOrderService
     {
-        private readonly IOrderRepository _orderRepository;
+        private readonly IOrdersRepository _ordersRepository;
+        private readonly ICustomersRepository _customersRepository;
         
-        public OrderService(IRepositoryBase<Order, int> repository, IUnitOfWork unitOfWork, IMapper mapper, IOrderRepository orderRepository) : base(repository, unitOfWork, mapper)
+        public OrderService(IRepositoryBase<Order, int> repository, IUnitOfWork unitOfWork, IMapper mapper, IOrdersRepository ordersRepository, ICustomersRepository customersRepository) : base(repository, unitOfWork, mapper)
         {
-            _orderRepository = orderRepository;
+            _ordersRepository = ordersRepository;
+            _customersRepository = customersRepository;
         }
       
         
-        public async Task<CustomerOrdersDto> GetOrdersAsync(int customerId, bool trackChanges = false)
+        public async Task<CustomerOrdersDto> GetOrdersAsync(int customerId, bool trackChange = false)
         {
-            var orders = await _orderRepository.GetOrdersAsync(customerId, trackChanges);
+            var orders = await _ordersRepository.GetOrdersAsync(customerId, trackChange);
             var orderDtos = _mapper.Map<IEnumerable<OrderDto>>(orders);
             var customer = orders.FirstOrDefault().Customer;
             var result = new CustomerOrdersDto
@@ -37,9 +39,9 @@ namespace AspNetCorePostgreSQLDockerApp.Services
             return result;
         }
 
-        public async Task<OrderDto> GetOrderAsync(int orderId, bool trackChanges = false)
+        public async Task<OrderDto> GetOrderAsync(int orderId, bool trackChange = false)
         {
-            var order = await _orderRepository.GetOrderAsync(orderId, trackChanges);
+            var order = await _ordersRepository.GetOrderAsync(orderId, trackChange);
             if (order == null) return null;
             
             var result = _mapper.Map<OrderDto>(order);
@@ -48,7 +50,7 @@ namespace AspNetCorePostgreSQLDockerApp.Services
 
         public async Task<IEnumerable<OrderDto>> CreateOrdersAsync(int customerId, List<Order> orders)
         {
-            var addedOrders = _orderRepository.CreateOrders(customerId, orders);
+            var addedOrders = _ordersRepository.CreateOrders(customerId, orders);
             await SaveAsync();
             var result = _mapper.Map<IEnumerable<OrderDto>>(addedOrders);
             
@@ -57,10 +59,10 @@ namespace AspNetCorePostgreSQLDockerApp.Services
 
         public async Task<OrderDto> CancelOrderAsync(int orderId)
         {
-            var order = await _orderRepository.GetOrderAsync(orderId);
+            var order = await _ordersRepository.GetOrderAsync(orderId);
             if (order == null) return null;
             
-            var canceledOrder = _orderRepository.CancelOrder(order);
+            var canceledOrder = _ordersRepository.CancelOrder(order);
             await SaveAsync();
             var result = _mapper.Map<OrderDto>(canceledOrder);
             
@@ -69,14 +71,21 @@ namespace AspNetCorePostgreSQLDockerApp.Services
 
         public async Task<OrderDto> UpdateOrderAsync(OrderForUpdateDto orderDto)
         {
-            var order = await _orderRepository.GetOrderAsync(orderDto.Id);
+            var order = await _ordersRepository.GetOrderAsync(orderDto.Id);
             if (order == null) return null;
             
-            var updatedOrder = _orderRepository.UpdateOrder(order);
+            var updatedOrder = _ordersRepository.UpdateOrder(order);
             await SaveAsync();
             var result = _mapper.Map<OrderDto>(updatedOrder);
             
             return result; 
+        }
+
+        public async Task<CustomerDto> GetCustomerAsync(int id, bool trackChange = false)
+        {
+            var customer = await _customersRepository.GetCustomerAsync(id, trackChange);
+            var result = _mapper.Map<CustomerDto>(customer);
+            return result;
         }
     }
 }

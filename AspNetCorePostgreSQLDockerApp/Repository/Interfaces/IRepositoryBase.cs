@@ -8,9 +8,9 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
 {
     public interface IRepositoryBase<T, K> where T : IEntity<K>
     {
-        IQueryable<T> FindAll(bool trackChanges = false);
+        IQueryable<T> FindAll(bool trackChange = false);
         IQueryable<T> FindAll(bool trackChange, params Expression<Func<T, object>>[] includeProperties);
-        IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges = false);
+        IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChange = false);
         IQueryable<T> FindByCondition(bool trackChange, Expression<Func<T, bool>> expression,
             params Expression<Func<T, object>>[] includeProperties);
         Task<T> FindByIdAsync(K id, params Expression<Func<T, object>>[] includeProperties);

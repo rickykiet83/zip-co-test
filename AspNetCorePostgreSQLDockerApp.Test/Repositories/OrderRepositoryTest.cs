@@ -35,10 +35,10 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Repositories
             var orders = OrderFactory.Order.Generate(4).Select(o => o.AddCustomer(customer))
                 .ToList();
             customer.AddOrders(orders);
-            OrderRepository orderRepository = new OrderRepository(_context, _logger);
-            orderRepository.CreateOrders(customer.Id, customer.Orders);
+            OrdersRepository ordersRepository = new OrdersRepository(_context, _logger);
+            ordersRepository.CreateOrders(customer.Id, customer.Orders);
 
-            var result = await orderRepository.GetOrdersAsync(customer.Id);
+            var result = await ordersRepository.GetOrdersAsync(customer.Id);
             result.Should().NotBeNullOrEmpty();
             result.ElementAt(0).CustomerId.Should().Equals(customer.Id);
         }
@@ -54,10 +54,10 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Repositories
                 .ToList();
             orders.ElementAt(0).Status = EOrderStatus.InProgress;
             customer.AddOrders(orders);
-            OrderRepository orderRepository = new OrderRepository(_context, _logger);
-            orderRepository.CreateOrders(customer.Id, orders);
+            OrdersRepository ordersRepository = new OrdersRepository(_context, _logger);
+            ordersRepository.CreateOrders(customer.Id, orders);
             var cancelOrder = orders.ElementAt(0);
-            var result = orderRepository.CancelOrder(cancelOrder);
+            var result = ordersRepository.CancelOrder(cancelOrder);
 
             result.Should().NotBeNull();
             result.Status.Should().Equals(EOrderStatus.Cancelled);
@@ -73,8 +73,8 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Repositories
             var orders = OrderFactory.Order.Generate(1).Select(o => o.AddCustomer(customer))
                 .ToList();
             customer.AddOrders(orders);
-            OrderRepository orderRepository = new OrderRepository(_context, _logger);
-            orderRepository.CreateOrders(customer.Id, orders);
+            OrdersRepository ordersRepository = new OrdersRepository(_context, _logger);
+            ordersRepository.CreateOrders(customer.Id, orders);
 
             var updateOrder = orders.ElementAt(0);
             updateOrder.Product = "Test";
@@ -82,7 +82,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Repositories
             updateOrder.Quantity = 1;
             updateOrder.Status = EOrderStatus.Delivered;
 
-            var result = orderRepository.UpdateOrder(updateOrder);
+            var result = ordersRepository.UpdateOrder(updateOrder);
             result.AddCustomer(customer);
             
             result.Should().NotBeNull();

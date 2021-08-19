@@ -16,8 +16,8 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
             _dbContext = dbContext;
         }
         
-        public IQueryable<T> FindAll(bool trackChanges = false) =>
-            !trackChanges ? _dbContext.Set<T>().AsNoTracking() : _dbContext.Set<T>();
+        public IQueryable<T> FindAll(bool trackChange = false) =>
+            !trackChange ? _dbContext.Set<T>().AsNoTracking() : _dbContext.Set<T>();
         
         public IQueryable<T> FindAll(bool trackChange, params Expression<Func<T, object>>[] includeProperties)
         {
@@ -28,8 +28,8 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
             return includeProperties.Aggregate(items, (current, includeProperty) => current.Include(includeProperty));
         }
 
-        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges = false) =>
-            !trackChanges
+        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChange = false) =>
+            !trackChange
                 ? _dbContext.Set<T>()
                     .Where(expression)
                     .AsNoTracking()
