@@ -63,7 +63,7 @@ describe('CustomerOrdersComponent', () => {
   }));
 
   it('should create the component', () => {
-    console.log(component);
+    expect(component).toBeTruthy();
   })
 
 });
