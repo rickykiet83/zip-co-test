@@ -64,8 +64,7 @@ describe('CustomerOrdersComponent', () => {
     expect(revenueElement).toBeTruthy();
 
     let tableElement = el.query(By.css('table')).nativeElement;
-    console.log(tableElement);
-
+    expect(tableElement).toBeTruthy();
   }));
 
 });
