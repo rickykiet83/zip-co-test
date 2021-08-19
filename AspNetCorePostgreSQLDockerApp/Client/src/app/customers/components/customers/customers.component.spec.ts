@@ -59,7 +59,7 @@ describe('CustomersComponent', () => {
 
   });
 
-  it('should click Search button', fakeAsync(() => {
+  it('should onSearchByKeyword is trigger by click Search button', fakeAsync(() => {
 
     spyOn(component, 'onSearchByKeyword');
     const searchButton = el.query(By.css('#btn-search')).nativeElement;
@@ -69,7 +69,7 @@ describe('CustomersComponent', () => {
     expect(component.onSearchByKeyword).toHaveBeenCalled();
   }));
 
-  it('should display customers with filtered email', fakeAsync(() => {
+  it('should display customers with filtered email should work', fakeAsync(() => {
 
     const email = customers[0].email;
     const filteredCustomers = customers.filter(c => c.email === email);

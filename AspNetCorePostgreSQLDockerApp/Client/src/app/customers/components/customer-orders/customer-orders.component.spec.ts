@@ -6,10 +6,13 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {of} from "rxjs";
 import {RouterTestingModule} from "@angular/router/testing";
 import {CUSTOMERS} from "../../../../common/customer-data";
+import {DebugElement} from "@angular/core";
+import {By} from "@angular/platform-browser";
 
 describe('CustomerOrdersComponent', () => {
   let component: CustomerOrdersComponent;
   let fixture: ComponentFixture<CustomerOrdersComponent>;
+  let el: DebugElement;
   const customer = CUSTOMERS[0];
   const customerOrders = customer.orders;
 
@@ -36,6 +39,7 @@ describe('CustomerOrdersComponent', () => {
       .compileComponents()
       .then(() => {
         fixture = TestBed.createComponent(CustomerOrdersComponent);
+        el = fixture.debugElement;
         component = fixture.componentInstance;
       });
   }));
@@ -49,12 +53,19 @@ describe('CustomerOrdersComponent', () => {
   it('should display all orders', fakeAsync(() => {
 
     const customerOrdersComponent: any = component;
-    console.log(customerOrdersComponent.route.snapshot.data);
     const orders = customerOrdersComponent.route.snapshot.data.orders;
     expect(orders).toEqual(customerOrders);
 
   }));
 
-  
+  it('should display total Avenue', fakeAsync(() => {
+
+    let revenueElement = el.query(By.css('#revenue')).nativeElement;
+    expect(revenueElement).toBeTruthy();
+
+    let tableElement = el.query(By.css('table')).nativeElement;
+    console.log(tableElement);
+
+  }));
 
 });
