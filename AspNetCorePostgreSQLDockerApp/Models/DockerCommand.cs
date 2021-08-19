@@ -1,10 +1,10 @@
 using System.Collections.Generic;
+using AspNetCorePostgreSQLDockerApp.Models.Abstract;
 
 namespace AspNetCorePostgreSQLDockerApp.Models
 {
-    public class DockerCommand
+    public class DockerCommand : DomainEntity<int>
     {
-        public int Id { get; set; }
         public string Command { get; set; }
         public string Description { get; set; }
         public List<DockerCommandExample> Examples { get; set; }
