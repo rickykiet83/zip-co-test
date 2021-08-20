@@ -26,6 +26,14 @@ export class OrderService {
       );
   }
 
+  cancelOrder(customerId: number, orderId: number): Observable<IOrder> {
+    const url = this.url + customerId + '/orders/' + orderId + '/cancel';
+    return this.http.get<IOrder>(url)
+      .pipe(
+        catchError(this.handleError),
+      );
+  }
+
   handleError(error: any) {
     console.error(error);
     return throwError(error || 'Server error');

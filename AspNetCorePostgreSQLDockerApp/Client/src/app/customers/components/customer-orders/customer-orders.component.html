@@ -36,6 +36,7 @@
     <th>Quantity</th>
     <th>Total</th>
     <th>Status</th>
+    <th>Action</th>
   </tr>
   </thead>
   <tbody>
@@ -46,6 +47,12 @@
     <td>{{order.quantity}}</td>
     <td>{{order.orderTotal | currency:'AUD':'symbol'}}</td>
     <td>{{order.status}}</td>
+    <td>
+      <div class="btn-group pull-right">
+        <a type="button" class="btn btn-secondary">Edit Order</a>
+        <a (click)="onCancelOrder(order.id)" type="button" class="btn btn-secondary">Cancel Order</a>
+      </div>
+    </td>
   </tr>
   </tbody>
 </table>
