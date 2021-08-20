@@ -102,6 +102,60 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Services
             result.Should().NotBeNull();
             result.Should().BeEquivalentTo(updateOrder.ToUpdateDto(customer.Id));
         }
+        
+        [Fact]
+        public async Task Get_Customer_Result_Success()
+        {
+            var orders = OrderFactory.Order.Generate(1)
+                .Select(o => o.AddIndexKey().AddCustomer(customer)).ToList();
+            customer.AddOrders(orders);
+
+            var orderService = new OrderService(_baseRepoMock.Object, _mockUnitOfWork.Object, _mapper,
+                _orderRepoMock.Object, _customerRepoMock.Object);
+
+            var result = orderService.GetCustomerAsync(customer.Id).Result;
+            result.Should().NotBeNull();
+            result.Id.Should().Equals(customer.Id);
+        }
+
+        #region Failed Test Cases
+
+        [Fact]
+        public void Customer_Add_InValidOrders_Result_Failed()
+        {
+            var orders = OrderFactory.Order.Generate(1)
+                .Select(o => o.AddIndexKey().AddCustomer(customer)).ToList();
+            customer.AddOrders(orders);
+            orders.ElementAt(0).Product = null;
+
+            _orderRepoMock.Setup(x => x.CreateOrders(customer.Id, orders));
+            
+            var orderService = new OrderService(_baseRepoMock.Object, _mockUnitOfWork.Object, _mapper,
+                _orderRepoMock.Object, _customerRepoMock.Object);
+
+            var result = orderService.CreateOrdersAsync(customer.Id, orders).Result;
+            result.Should().BeEmpty();
+        }
+
+        [Theory]
+        [InlineData(0)]
+        public void Get_InvalidId_Result_Null(int id)
+        {
+            var orders = OrderFactory.Order.Generate(1)
+                .Select(o => o.AddIndexKey().AddCustomer(customer)).ToList();
+            customer.AddOrders(orders);
+            _orderRepoMock.Setup(x => x.CreateOrders(customer.Id, orders));
+            
+            var orderService = new OrderService(_baseRepoMock.Object, _mockUnitOfWork.Object, _mapper,
+                _orderRepoMock.Object, _customerRepoMock.Object);
+
+            var result = orderService.GetOrderAsync(id, false).Result;
+            result.Should().BeNull();
+        }
+
+
+        #endregion
+        
 
     }
 }
