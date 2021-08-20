@@ -56,7 +56,6 @@ describe('CustomerOrdersAddComponent', () => {
 
     const containerForm = el.query(By.css('.container-border-form')).nativeElement;
     expect(containerForm).toBeTruthy();
-    console.log(containerForm);
 
     const inputs = el.queryAll(By.css('input'));
     const inputProduct = inputs.find(i => i.attributes.formControlName === 'product');
