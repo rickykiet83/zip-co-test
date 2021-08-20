@@ -13,10 +13,10 @@
 
 <div class="container">
   <div class="row ">
-    <button (click)="onSubmitForm()" class="btn btn-primary" [disabled]="!isFormValid">
+    <button (click)="onSubmitForm()" type="button" class="btn btn-primary" [disabled]="!isFormValid">
       Create Orders
     </button>
-    <button [routerLink]="['/customers/' + customerModel.id + '/orders']"  class="btn btn-secondary">
+    <button type="button" [routerLink]="['/customers/' + customerModel.id + '/orders']"  class="btn btn-secondary">
       Cancel
     </button>
   </div>
@@ -126,10 +126,10 @@
     </div>
   </div>
   <div class="row">
-    <button (click)="onSubmitForm()" class="btn btn-primary" [disabled]="!isFormValid">
+    <button (click)="onSubmitForm()" type="button" class="btn btn-primary" [disabled]="!isFormValid">
       Create Orders
     </button>
-    <button (click)="addOrder()" class="btn btn-secondary">Add More</button>
+    <button (click)="addOrder()" type="button" class="btn btn-secondary">Add More</button>
   </div>
   <div class="row alert-container" *ngIf="totalInprogressStatus > 4">
     <div class="alert alert-warning alert-dismissible" role="alert">

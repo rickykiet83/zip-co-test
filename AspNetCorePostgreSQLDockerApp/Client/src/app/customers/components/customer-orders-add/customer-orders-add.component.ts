@@ -42,12 +42,12 @@ export class CustomerOrdersAddComponent implements OnInit {
       product: [null, [
         Validators.required,
         Validators.minLength(5),
-        Validators.minLength(150),
+        Validators.maxLength(150),
       ]],
       price: [0, Validators.required],
       quantity: [null, Validators.required],
       status: ['InProgress', Validators.required],
-      customerId: [{value: this.customerModel.id, disabled: true}]
+      customerId: [{value: this.customerModel.id, disabled: true}, Validators.required]
     });
   }
 
@@ -91,7 +91,9 @@ export class CustomerOrdersAddComponent implements OnInit {
   get isFormValid(): boolean {
     return this.orders.length > 0
      && (this.customerModel.id !== null && this.customerModel.id > 0)
-      && this.totalInprogressStatus <= 4;
+      && this.totalInprogressStatus <= 4
+      && this.orders.valid
+      ;
   }
 
   get totalInprogressStatus(): number {
