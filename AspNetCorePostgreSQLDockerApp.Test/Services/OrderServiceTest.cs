@@ -54,10 +54,12 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Services
 
             var result = orderService.CreateOrdersAsync(customer.Id, orders).Result;
             result.Should().NotBeNull();
+            result.Customer.Id.Should().Equals(customer.Id);
+            result.OrderCount.Should().Equals(orders.Count);
         }
         
         [Fact]
-        public async Task Cancel_Order_Result_Success()
+        public void Cancel_Order_Result_Success()
         {
             var orders = OrderFactory.Order.Generate(1)
                 .Select(o => o.AddIndexKey().AddCustomer(customer)).ToList();
@@ -79,7 +81,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Services
         }
 
         [Fact]
-        public async Task Update_Order_Result_Success()
+        public void Update_Order_Result_Success()
         {
             var orders = OrderFactory.Order.Generate(1)
                 .Select(o => o.AddIndexKey().AddCustomer(customer)).ToList();
@@ -100,11 +102,14 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Services
 
             var result = orderService.UpdateOrderAsync(updateOrder.ToUpdateDto(customer.Id)).Result;
             result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(updateOrder.ToUpdateDto(customer.Id));
+            result.Id.Should().Equals(updateOrder.Id);
+            result.Product.Should().Equals(updateOrder.Product);
+            result.Price.Should().Equals(updateOrder.Price);
+            result.Status.Should().Equals(updateOrder.Status);
         }
         
         [Fact]
-        public async Task Get_Customer_Result_Success()
+        public void Get_Customer_Result_Success()
         {
             var orders = OrderFactory.Order.Generate(1)
                 .Select(o => o.AddIndexKey().AddCustomer(customer)).ToList();
@@ -134,7 +139,8 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Services
                 _orderRepoMock.Object, _customerRepoMock.Object);
 
             var result = orderService.CreateOrdersAsync(customer.Id, orders).Result;
-            result.Should().BeEmpty();
+            result.Customer.Should().BeNull();
+            result.Orders.Should().BeEmpty();
         }
 
         [Theory]

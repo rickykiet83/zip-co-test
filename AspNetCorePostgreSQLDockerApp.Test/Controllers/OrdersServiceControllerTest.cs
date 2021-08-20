@@ -45,7 +45,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Controllers
         }
         
         [Fact]
-        public void Create_Orders_ValidRequest_OkResult()
+        public void Create_Orders_ValidRequest_CreatedAtRouteResult()
         {
             var orders = OrderFactory.Order.Generate(4)
                 .Select(o => o.AddCustomer(customer))
@@ -55,7 +55,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Controllers
                 .ReturnsAsync(orders); 
             
             var mockOrderService = new Mock<IOrderService>();
-            var orderDtos = orders.Select(o => o.ToDto(customer.Id));
+            var orderDtos = orders.Select(o => o.ToDto());
             var customerOrdersDto = new CustomerOrdersDto
             {
                 Customer = customer.ToDto(),
@@ -76,7 +76,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Controllers
             };
                 
             var result = controller.CreateOrders(customer.Id, orderDto).Result;
-            result.Should().BeOfType(typeof(ObjectResult));
+            result.Should().BeOfType(typeof(CreatedAtRouteResult));
             Assert.Equal(StatusCodes.Status201Created, (result as ObjectResult).StatusCode);
         }
         
@@ -95,7 +95,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Controllers
                 .ReturnsAsync(orders);
             
             var mockOrderService = new Mock<IOrderService>();
-            var orderDtos = orders.Select(o => o.ToDto(customer.Id));
+            var orderDtos = orders.Select(o => o.ToDto());
             var customerOrdersDto = new CustomerOrdersDto
             {
                 Customer = customer.ToDto(),
@@ -128,7 +128,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Controllers
             
             var mockOrderService = new Mock<IOrderService>();
             mockOrderService.Setup(x => x.UpdateOrderAsync(It.IsAny<OrderForUpdateDto>()))
-                .ReturnsAsync(order.ToDto(customer.Id));
+                .ReturnsAsync(order.ToDto());
             mockOrderService.Setup(x => x.GetCustomerAsync(customer.Id, false))
                 .ReturnsAsync(customer.ToDto());
 
@@ -150,7 +150,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Controllers
             
             var mockOrderService = new Mock<IOrderService>();
             mockOrderService.Setup(x => x.CancelOrderAsync(order.Id))
-                .ReturnsAsync(order.ToDto(customer.Id));
+                .ReturnsAsync(order.ToDto());
         
             var controller =
                 new CustomerOrdersServiceController(mockOrderService.Object, _mapper, _loggerMock.Object);
@@ -170,7 +170,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Controllers
             
             var mockOrderService = new Mock<IOrderService>();
             mockOrderService.Setup(x => x.GetOrderAsync(order.Id, false))
-                .ReturnsAsync(order.ToDto(customer.Id));
+                .ReturnsAsync(order.ToDto());
         
             var controller =
                 new CustomerOrdersServiceController(mockOrderService.Object, _mapper, _loggerMock.Object);
@@ -193,7 +193,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Controllers
             var customerOrdersDto = new CustomerOrdersDto
             {
                 Customer = customer.ToDto(),
-                Orders = orders.Select(o => o.ToDto(customer.Id)).ToList()
+                Orders = orders.Select(o => o.ToDto()).ToList()
             };
             mockOrderService.Setup(x => x.GetOrdersAsync(customer.Id, false))
                 .ReturnsAsync(customerOrdersDto);

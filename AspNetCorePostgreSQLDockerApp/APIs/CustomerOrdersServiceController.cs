@@ -78,8 +78,10 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
                 return NotFound();
             }
             var orderEntities = _mapper.Map<IEnumerable<Order>>(ordersDto.Orders);
-            var orders = await _orderService.CreateOrdersAsync(customerId, orderEntities.ToList());
-            return StatusCode(StatusCodes.Status201Created, orders.ToList());
+            var result = await _orderService.CreateOrdersAsync(customerId, orderEntities.ToList());
+            
+            // return StatusCode(StatusCodes.Status201Created, orders.ToList());
+            return CreatedAtRoute(RouteNames.CreateOrders, new { customerId }, result);
         }
         
         [HttpPut("{orderId}",Name = RouteNames.UpdateOrder)]

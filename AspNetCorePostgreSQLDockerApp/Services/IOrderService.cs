@@ -9,7 +9,7 @@ namespace AspNetCorePostgreSQLDockerApp.Services
     {
         Task<CustomerOrdersDto> GetOrdersAsync(int customerId, bool trackChange = false);
         Task<OrderDto> GetOrderAsync(int orderId, bool trackChange = false);
-        Task<IEnumerable<OrderDto>> CreateOrdersAsync(int customerId, List<Order> orders);
+        Task<CustomerOrdersDto> CreateOrdersAsync(int customerId, List<Order> orders);
         Task<OrderDto> CancelOrderAsync(int orderId);
         Task<OrderDto> UpdateOrderAsync(OrderForUpdateDto order);
         Task<CustomerDto> GetCustomerAsync(int id, bool trackChange = false);

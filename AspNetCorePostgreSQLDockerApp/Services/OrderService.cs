@@ -48,11 +48,11 @@ namespace AspNetCorePostgreSQLDockerApp.Services
             return result;
         }
 
-        public async Task<IEnumerable<OrderDto>> CreateOrdersAsync(int customerId, List<Order> orders)
+        public async Task<CustomerOrdersDto> CreateOrdersAsync(int customerId, List<Order> orders)
         {
             var addedOrders = _ordersRepository.CreateOrders(customerId, orders);
             await SaveAsync();
-            var result = _mapper.Map<IEnumerable<OrderDto>>(addedOrders);
+            var result = _mapper.Map<CustomerOrdersDto>(addedOrders);
             
             return result;
         }

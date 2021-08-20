@@ -6,5 +6,8 @@ namespace AspNetCorePostgreSQLDockerApp.Dtos
     {
         public CustomerDto Customer { get; set; } = new CustomerDto();
         public List<OrderDto> Orders { get; set; } = new List<OrderDto>();
+
+        public int CustomerId => Customer.Id;
+        public int OrderCount => Orders.Count;
     }
 }

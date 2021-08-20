@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using AspNetCorePostgreSQLDockerApp.Dtos;
 using AspNetCorePostgreSQLDockerApp.Models;
 using AutoMapper;
@@ -10,6 +12,15 @@ namespace AspNetCorePostgreSQLDockerApp
         {
             CreateMap<Order, OrderDto>().ReverseMap();
             CreateMap<Customer, CustomerDto>();
+            CreateMap<IEnumerable<Order>, CustomerOrdersDto>()
+                .ForMember(dest => dest.Customer, opt =>
+                {
+                    opt.MapFrom(src => src.FirstOrDefault().Customer);
+                })
+                .ForMember(dest => dest.Orders, opts => 
+                    opts.MapFrom(src => src)
+                )
+                ;
             
             CreateMap<OrderForCreationDto, Order>();
             CreateMap<OrderForUpdateDto, Order>();

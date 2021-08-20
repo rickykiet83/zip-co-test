@@ -33,9 +33,9 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Factories
             return order;
         }
 
-        public static OrderDto ToDto(this Order order, int customerId)
+        public static OrderDto ToDto(this Order order)
         {
-            return new OrderDto(customerId)
+            return new OrderDto()
             {
                 Price = order.Price,
                 Product = order.Product,
