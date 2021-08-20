@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AspNetCorePostgreSQLDockerApp.Models;
+using AspNetCorePostgreSQLDockerApp.Models.Abstract;
 using AspNetCorePostgreSQLDockerApp.Repository;
 using AspNetCorePostgreSQLDockerApp.Services;
 using AspNetCorePostgreSQLDockerApp.Test.Factories;
@@ -31,8 +33,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Services
             _mapper = (Mapper)_mapperConfiguration.CreateMapper();
             _mockUnitOfWork = new Mock<IUnitOfWork>();
             
-            customer = CustomerFactory.Customer.Generate();
-            customer.Id = 1;
+            customer = CustomerFactory.Customer.Generate().AddIndexKey();
             _customerRepoMock.Setup(x => x.GetCustomerAsync(customer.Id, false))
                 .ReturnsAsync(customer);
         }
@@ -40,7 +41,8 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Services
         [Fact]
         public void Customer_Add_ValidOrders_Result_Success()
         {
-            var orders = OrderFactory.Order.Generate(4).Select(o => o.AddCustomer(customer))
+            var orders = OrderFactory.Order.Generate(4)
+                .Select(o => o.AddCustomer(customer).AddIndexKey())
                 .ToList();
             customer.AddOrders(orders);
 
@@ -54,5 +56,52 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Services
             result.Should().NotBeNull();
         }
         
+        [Fact]
+        public async Task Cancel_Order_Result_Success()
+        {
+            var orders = OrderFactory.Order.Generate(1)
+                .Select(o => o.AddIndexKey().AddCustomer(customer)).ToList();
+            customer.AddOrders(orders);
+            orders.ElementAt(0).Status = EOrderStatus.Cancelled;
+            var cancelOrder = orders.ElementAt(0);
+
+            _orderRepoMock.Setup(x => x.GetOrderAsync(cancelOrder.Id, false))
+                .ReturnsAsync(cancelOrder);
+            _orderRepoMock.Setup(x => x.CancelOrder(cancelOrder))
+                .Returns(cancelOrder);
+            
+            var orderService = new OrderService(_baseRepoMock.Object, _mockUnitOfWork.Object, _mapper,
+                _orderRepoMock.Object, _customerRepoMock.Object);
+
+            var result = orderService.CancelOrderAsync(cancelOrder.Id).Result;
+            result.Should().NotBeNull();
+            result.Status.Should().Equals(EOrderStatus.Cancelled);
+        }
+
+        [Fact]
+        public async Task Update_Order_Result_Success()
+        {
+            var orders = OrderFactory.Order.Generate(1)
+                .Select(o => o.AddIndexKey().AddCustomer(customer)).ToList();
+            customer.AddOrders(orders);
+            var updateOrder = orders.ElementAt(0);
+            updateOrder.Product = "Test";
+            updateOrder.Price = 1;
+            updateOrder.Quantity = 1;
+            updateOrder.Status = EOrderStatus.Delivered;
+
+            _orderRepoMock.Setup(x => x.GetOrderAsync(updateOrder.Id, false))
+                .ReturnsAsync(updateOrder);
+            _orderRepoMock.Setup(x => x.UpdateOrder(updateOrder))
+                .Returns(updateOrder);
+            
+            var orderService = new OrderService(_baseRepoMock.Object, _mockUnitOfWork.Object, _mapper,
+                _orderRepoMock.Object, _customerRepoMock.Object);
+
+            var result = orderService.UpdateOrderAsync(updateOrder.ToUpdateDto(customer.Id)).Result;
+            result.Should().NotBeNull();
+            result.Should().BeEquivalentTo(updateOrder.ToUpdateDto(customer.Id));
+        }
+
     }
 }
