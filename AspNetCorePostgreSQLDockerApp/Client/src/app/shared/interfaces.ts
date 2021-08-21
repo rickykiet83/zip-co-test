@@ -27,6 +27,7 @@ export interface IOrder {
   quantity: number;
   status: string;
   customerId?: number;
+  customer?: ICustomer;
   orderTotal?: number;
 }
 

@@ -114,9 +114,9 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Services
             updateOrder.Quantity = 1;
             updateOrder.Status = EOrderStatus.Delivered;
 
-            _orderRepoMock.Setup(x => x.GetOrderAsync(updateOrder.Id, false))
+            _orderRepoMock.Setup(x => x.GetOrderAsync(updateOrder.Id, true))
                 .ReturnsAsync(updateOrder);
-            _orderRepoMock.Setup(x => x.UpdateOrder(updateOrder))
+            _orderRepoMock.Setup(x => x.UpdateOrder(It.IsAny<Order>()))
                 .Returns(updateOrder);
             
             var orderService = new OrderService(_baseRepoMock.Object, _mockUnitOfWork.Object, _mapper,

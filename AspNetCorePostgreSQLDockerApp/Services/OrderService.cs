@@ -60,10 +60,8 @@ namespace AspNetCorePostgreSQLDockerApp.Services
 
         public async Task<OrderDto> UpdateOrderAsync(OrderForUpdateDto orderDto)
         {
-            var order = await _ordersRepository.GetOrderAsync(orderDto.Id);
-            if (order == null) return null;
-            
-            var updatedOrder = _ordersRepository.UpdateOrder(order);
+            var updateOrder = _mapper.Map<Order>(orderDto);
+            var updatedOrder = _ordersRepository.UpdateOrder(updateOrder);
             await SaveAsync();
             var result = _mapper.Map<OrderDto>(updatedOrder);
             

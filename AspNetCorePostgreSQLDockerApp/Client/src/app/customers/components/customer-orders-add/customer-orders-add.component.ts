@@ -4,6 +4,7 @@ import {CustomerModel, CustomerOrdersModel} from "../../../shared/customer-order
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ICustomerCreateOrders, IOrder} from "../../../shared/interfaces";
 import {OrderService} from "../../../core/order.service";
+import {statusList} from "../../../../common/statusList";
 
 @Component({
   selector: 'app-customer-orders-add',
@@ -12,7 +13,7 @@ import {OrderService} from "../../../core/order.service";
 })
 export class CustomerOrdersAddComponent implements OnInit {
   customerModel: CustomerModel = new CustomerModel(null);
-  statusList = ['InProgress', 'Delivered', 'Cancelled'];
+  statusList = statusList;
 
   orderData: IOrder[] = [];
   serverError = false;
@@ -41,7 +42,7 @@ export class CustomerOrdersAddComponent implements OnInit {
     return this.orderForm = this.fb.group({
       product: [null, [
         Validators.required,
-        Validators.minLength(5),
+        Validators.minLength(3),
         Validators.maxLength(150),
       ]],
       price: [0, Validators.required],

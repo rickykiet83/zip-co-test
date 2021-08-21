@@ -43,6 +43,16 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Factories
                 Status = order.Status
             };
         }
+        public static OrderDetailDto ToDetailDto(this Order order)
+        {
+            return new OrderDetailDto()
+            {
+                Price = order.Price,
+                Product = order.Product,
+                Quantity = order.Quantity,
+                Status = order.Status
+            };
+        }
         
         public static OrderForCreationDto ToCreateDto(this Order order, int customerId)
         {

@@ -170,7 +170,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Controllers
             
             var mockOrderService = new Mock<IOrderService>();
             mockOrderService.Setup(x => x.GetOrderAsync(order.Id, false))
-                .ReturnsAsync(order.ToDto());
+                .ReturnsAsync(order.ToDetailDto);
         
             var controller =
                 new CustomerOrdersServiceController(mockOrderService.Object, _mapper, _loggerMock.Object);

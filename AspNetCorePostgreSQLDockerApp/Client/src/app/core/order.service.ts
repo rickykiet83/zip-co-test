@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable, throwError} from "rxjs";
 import {ICustomerCreateOrders, ICustomerOrders, IOrder} from "../shared/interfaces";
 import {catchError, map} from "rxjs/operators";
+import {OrderModel} from "../shared/customer-orders.model";
 
 @Injectable()
 export class OrderService {
@@ -19,18 +20,28 @@ export class OrderService {
 
   createOrders(customerId: number, orders: ICustomerCreateOrders): Observable<boolean> {
     const url = this.url + customerId + '/orders';
-    return this.http.post(url, orders)
+    return this.http.post<ICustomerCreateOrders>(url, orders)
       .pipe(
         catchError(this.handleError),
-        map(result => result !== null)
+        map(result => result && result.customerId !== null)
       );
   }
 
-  getOrder(customerId: number, orderId: number): Observable<IOrder> {
+  updateOrder(order: IOrder): Observable<boolean> {
+    const url = this.url + order.customerId + '/orders/' + order.id;
+    return this.http.put<IOrder>(url, order)
+      .pipe(
+        catchError(this.handleError),
+        map(result => result && result.id !== null)
+      );
+  }
+
+  getOrder(customerId: number, orderId: number): Observable<OrderModel> {
     const url = this.url + customerId + '/orders/' + orderId;
     return this.http.get<IOrder>(url)
       .pipe(
-        catchError(this.handleError)
+        catchError(this.handleError),
+        map(result => new OrderModel(result.id, result))
       );
   }
 

@@ -57,12 +57,18 @@ export class OrderModel implements IOrder {
   quantity: number;
   status: string;
   customerId: number;
+  customer?: ICustomer;
   constructor(public id: number, data?: IOrder) {
     this.price = data?.price || 0;
     this.product = data?.product || '';
     this.quantity = data?.quantity || 0;
     this.status = data?.status || '';
     this.customerId = data?.customerId || null;
+    this.customer = data?.customer || null;
+  }
+
+  get CustomerModel() {
+    return new CustomerModel(this.customer.id, this.customer);
   }
 
   get orderTotal(): number {

@@ -10,7 +10,7 @@ namespace AspNetCorePostgreSQLDockerApp.Validations
             RuleFor(x => x.Product)
                 .NotEmpty().WithMessage("Product is required")
                 .MaximumLength(150).WithMessage("Product name maximum length should be 150.")
-                .MinimumLength(3).WithMessage("Product name minimum length should be 5.");
+                .MinimumLength(3).WithMessage("Product name minimum length should be 3.");
             RuleFor(x => x.Quantity)
                 .GreaterThan(0).WithMessage("Quantity should be > 0.");
             RuleFor(x => x.Price)
