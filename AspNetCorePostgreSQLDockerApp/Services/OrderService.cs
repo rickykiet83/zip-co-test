@@ -28,12 +28,12 @@ namespace AspNetCorePostgreSQLDockerApp.Services
             return result;
         }
 
-        public async Task<OrderDto> GetOrderAsync(int orderId, bool trackChange = false)
+        public async Task<OrderDetailDto> GetOrderAsync(int orderId, bool trackChange = false)
         {
             var order = await _ordersRepository.GetOrderAsync(orderId, trackChange);
             if (order == null) return null;
             
-            var result = _mapper.Map<OrderDto>(order);
+            var result = _mapper.Map<OrderDetailDto>(order);
             return result;
         }
 

@@ -52,8 +52,8 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
         }
         
         [HttpGet("{orderId}", Name = RouteNames.GetOrder)]
-        [ProducesResponseType(typeof(List<OrderDto>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(List<OrderDto>), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(List<OrderDetailDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<OrderDetailDto>), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> GetOrder([Required] int orderId)
         {
             var order = await _orderService.GetOrderAsync(orderId);
