@@ -48,8 +48,8 @@
     <td>{{order.orderTotal | currency:'AUD':'symbol'}}</td>
     <td>{{order.status}}</td>
     <td>
-      <div class="btn-group pull-right">
-        <a type="button" class="btn btn-secondary">Edit Order</a>
+      <div class="btn-group">
+        <a [routerLink]="['/customers/' + customerOrders.customer?.id + '/orders/' + order.id +'/edit']" type="button" class="btn btn-secondary">Edit Order</a>
         <a (click)="onCancelOrder(order.id)" type="button" class="btn btn-secondary">Cancel Order</a>
       </div>
     </td>

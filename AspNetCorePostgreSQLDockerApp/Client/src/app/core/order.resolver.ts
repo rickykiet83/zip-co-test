@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from "@angular/router";
-import {ICustomerOrders, IOrder} from "../shared/interfaces";
+import {ICustomerOrders} from "../shared/interfaces";
 import {Observable} from "rxjs";
 import {OrderService} from "./order.service";
 import {map} from "rxjs/operators";

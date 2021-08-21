@@ -9,9 +9,10 @@ import {OrderResolveService} from "../core/order.resolver";
 import {OrderService} from "../core/order.service";
 import { CustomerOrdersAddComponent } from './components/customer-orders-add/customer-orders-add.component';
 import {CustomerResolverService} from "../core/customer-resolver.service";
+import { CustomerOrdersEditComponent } from './components/customer-orders-edit/customer-orders-edit.component';
 
 @NgModule({
-  declarations: [CustomersComponent, CustomerComponent, CustomerOrdersComponent, CustomerOrdersAddComponent],
+  declarations: [CustomersComponent, CustomerComponent, CustomerOrdersComponent, CustomerOrdersAddComponent, CustomerOrdersEditComponent],
   imports: [
     CommonModule,
     FormsModule, ReactiveFormsModule,
