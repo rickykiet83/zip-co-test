@@ -10,10 +10,9 @@ namespace AspNetCorePostgreSQLDockerApp.Models
         public decimal Price { get; set; }
         
         public EOrderStatus Status { get; set; }
-        
         public int CustomerId { get; set; }
         
         [ForeignKey("CustomerId")]
-        public virtual Customer Customer { get; set; }
+        public Customer Customer { get; set; }
     }
 }

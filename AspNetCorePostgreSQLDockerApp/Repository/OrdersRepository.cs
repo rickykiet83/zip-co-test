@@ -19,8 +19,8 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
         public async Task<IEnumerable<Order>> GetOrdersAsync(int customerId, bool trackChange = false)
         {
             var orders = await FindByCondition(trackChange, 
-                o => o.CustomerId.Equals(customerId),
-                o => o.Customer).ToListAsync();
+                o => o.CustomerId.Equals(customerId))
+                .ToListAsync();
 
             return orders;
         }

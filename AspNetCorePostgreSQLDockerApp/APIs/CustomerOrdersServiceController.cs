@@ -41,15 +41,12 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
         [ProducesResponseType(typeof(CustomerOrdersDto), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> GetOrders([Required] int customerId)
         {
-            var customer = await _orderService.GetCustomerAsync(customerId);
-            if (customer == null)
+            var result = await _orderService.GetOrdersAsync(customerId);
+            if (result == null)
             {
-                _logger.LogInformation($"Customer with orderId: {customer} doesn't exist in the database.");
+                _logger.LogInformation($"Customer with id: {customerId} doesn't exist in the database.");
                 return NotFound();
             }
-            
-            var result = await _orderService.GetOrdersAsync(customerId);
-            if (result == null) return NotFound();
             
             return new OkObjectResult(result);
         }

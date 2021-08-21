@@ -59,6 +59,28 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Services
         }
         
         [Fact]
+        public void Get_CustomerOrders_Result_Success()
+        {
+            var orders = OrderFactory.Order.Generate(4)
+                .Select(o => o.AddCustomer(customer).AddIndexKey())
+                .ToList();
+            customer.AddOrders(orders);
+            _customerRepoMock.Setup(x => x.GetCustomerOrdersAsync(customer.Id, false))
+                .ReturnsAsync(customer);
+
+            _orderRepoMock.Setup(x => x.CreateOrders(customer.Id, orders))
+                .Returns(orders);
+            
+            var orderService = new OrderService(_baseRepoMock.Object, _mockUnitOfWork.Object, _mapper,
+                _orderRepoMock.Object, _customerRepoMock.Object);
+
+            var result = orderService.GetOrdersAsync(customer.Id).Result;
+            result.Should().NotBeNull();
+            result.Customer.Id.Should().Equals(customer.Id);
+            result.OrderCount.Should().Equals(orders.Count);
+        }
+        
+        [Fact]
         public void Cancel_Order_Result_Success()
         {
             var orders = OrderFactory.Order.Generate(1)

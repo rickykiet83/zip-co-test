@@ -14,6 +14,6 @@ namespace AspNetCorePostgreSQLDockerApp.Models
         public int Zip { get; set; }
         public string Gender { get; set; }
         public int OrderCount { get; set; }
-        public List<Order> Orders { get; set; }
+        public ICollection<Order> Orders { get; set; }
     }
 }

@@ -22,20 +22,9 @@ namespace AspNetCorePostgreSQLDockerApp.Services
         
         public async Task<CustomerOrdersDto> GetOrdersAsync(int customerId, bool trackChange = false)
         {
-            var orders = await _ordersRepository.GetOrdersAsync(customerId, trackChange);
-            var orderDtos = _mapper.Map<IEnumerable<OrderDto>>(orders);
-            var customer = orders.FirstOrDefault().Customer;
-            var result = new CustomerOrdersDto
-            {
-                Customer = new CustomerDto
-                {
-                    Id = customerId,
-                    FirstName = customer.FirstName,
-                    LastName = customer.LastName,
-                    Email = customer.Email,
-                },
-                Orders = orderDtos.ToList()
-            };
+            var customer = await _customersRepository.GetCustomerOrdersAsync(customerId, trackChange);
+            if (customer == null) return null;
+            var result = _mapper.Map<CustomerOrdersDto>(customer);
             return result;
         }
 

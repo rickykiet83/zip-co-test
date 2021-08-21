@@ -36,7 +36,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Repositories
                 .ToList();
             customer.AddOrders(orders);
             OrdersRepository ordersRepository = new OrdersRepository(_context, _logger);
-            ordersRepository.CreateOrders(customer.Id, customer.Orders);
+            ordersRepository.CreateOrders(customer.Id, customer.Orders.ToList());
 
             var result = await ordersRepository.GetOrdersAsync(customer.Id);
             result.Should().NotBeNullOrEmpty();

@@ -31,6 +31,11 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
             return await FindByIdAsync(id);
         }
 
+        public Task<Customer> GetCustomerOrdersAsync(int id, bool trackChanges = false)
+        {
+            return FindByIdAsync(id, x => x.Orders);
+        }
+
         public async Task<List<State>> GetStatesAsync(bool trackChanges = false)
         {
             return await _stateRepository.FindAll(trackChanges)
