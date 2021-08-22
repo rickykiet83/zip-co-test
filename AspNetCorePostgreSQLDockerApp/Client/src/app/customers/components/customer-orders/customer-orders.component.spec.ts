@@ -8,6 +8,8 @@ import {RouterTestingModule} from "@angular/router/testing";
 import {CUSTOMERS} from "../../../../common/customer-data";
 import {DebugElement} from "@angular/core";
 import {By} from "@angular/platform-browser";
+import {OrderService} from "../../../core/order.service";
+import Order = jasmine.Order;
 
 describe('CustomerOrdersComponent', () => {
   let component: CustomerOrdersComponent;
@@ -15,7 +17,7 @@ describe('CustomerOrdersComponent', () => {
   let el: DebugElement;
   const customer = CUSTOMERS[0];
   const customerOrders = customer.orders;
-
+  let orderService: any;
   const activatedRouteMock = {
     snapshot: {
       data: {
@@ -23,10 +25,12 @@ describe('CustomerOrdersComponent', () => {
         orders: customerOrders,
       },
     },
-    queryParams: of({id: 1})
+    params: of({id: customer.id})
   };
 
   beforeEach(async(() => {
+    const orderServiceSpy = jasmine.createSpyObj('OrderService', ['getAllOrders'])
+
     TestBed.configureTestingModule({
       imports: [
         CustomersModule,
@@ -34,23 +38,25 @@ describe('CustomerOrdersComponent', () => {
       ],
       providers: [
         {provide: ActivatedRoute, useValue: activatedRouteMock},
+        {provide: OrderService, useValue: orderServiceSpy},
       ]
     })
       .compileComponents()
       .then(() => {
         fixture = TestBed.createComponent(CustomerOrdersComponent);
         el = fixture.debugElement;
+        orderService = TestBed.inject(OrderService);
         component = fixture.componentInstance;
       });
   }));
 
-  it('should create the component', () => {
+  it('should create the component', async () => {
 
     expect(component).toBeTruthy();
 
   })
 
-  it('should display all orders', fakeAsync(() => {
+  it('should display all orders', async (() => {
 
     const customerOrdersComponent: any = component;
     const orders = customerOrdersComponent.route.snapshot.data.orders;
@@ -58,7 +64,7 @@ describe('CustomerOrdersComponent', () => {
 
   }));
 
-  it('should display total Avenue', fakeAsync(() => {
+  it('should display total Avenue', async (() => {
 
     let revenueElement = el.query(By.css('#revenue')).nativeElement;
     expect(revenueElement).toBeTruthy();

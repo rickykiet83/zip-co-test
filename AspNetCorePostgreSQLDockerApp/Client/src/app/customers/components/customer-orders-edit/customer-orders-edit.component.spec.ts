@@ -1,25 +1,55 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed} from '@angular/core/testing';
 
-import { CustomerOrdersEditComponent } from './customer-orders-edit.component';
+import {of} from "rxjs";
+import {CustomersModule} from "../../customers.module";
+import {RouterTestingModule} from "@angular/router/testing";
+import {ActivatedRoute, Router} from "@angular/router";
+import {OrderService} from "../../../core/order.service";
+import {CUSTOMERS} from "../../../../common/customer-data";
+import {DebugElement} from "@angular/core";
+import {By} from "@angular/platform-browser";
+import {CustomerOrdersEditComponent} from "./customer-orders-edit.component";
 
 describe('CustomerOrdersEditComponent', () => {
   let component: CustomerOrdersEditComponent;
   let fixture: ComponentFixture<CustomerOrdersEditComponent>;
+  let el: DebugElement;
+  let orderService: any;
+  let orderData = CUSTOMERS[0].orders[0];
 
-  beforeEach(async(() => {
+  const activatedRouteMock = {
+    snapshot: {
+      data: {
+        order: orderData,
+      },
+    },
+    params: of({customerId: orderData.customerId ,id: orderData.id})
+  };
+
+  beforeEach(fakeAsync(() => {
+    const orderServiceSpy = jasmine.createSpyObj('OrderService', ['getOrder', 'updateOrder'])
+
     TestBed.configureTestingModule({
-      declarations: [ CustomerOrdersEditComponent ]
+      imports: [
+        CustomersModule,
+        RouterTestingModule
+      ],
+      providers: [
+        {provide: ActivatedRoute, useValue: activatedRouteMock},
+        {provide: OrderService, useValue: orderServiceSpy},
+      ]
     })
-    .compileComponents();
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(CustomerOrdersEditComponent);
+        component = fixture.componentInstance;
+        el = fixture.debugElement;
+        orderService = TestBed.inject(OrderService);
+        fixture.detectChanges();
+      });
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(CustomerOrdersEditComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+
 });
+

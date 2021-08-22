@@ -22,7 +22,7 @@ describe('CustomerOrdersAddComponent', () => {
         customer: CUSTOMERS[0],
       },
     },
-    queryParams: of({id: 1})
+    params: of({id: 1})
   };
 
   beforeEach(async(() => {
@@ -52,7 +52,7 @@ describe('CustomerOrdersAddComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  fit('should init order form and inputs', () => {
+  it('should init order form and inputs', () => {
 
     const containerForm = el.query(By.css('.container-border-form')).nativeElement;
     expect(containerForm).toBeTruthy();
