@@ -61,7 +61,6 @@ export class CustomerOrdersEditComponent implements OnInit {
       customerId: [{value: order.customerId, disabled: true}, Validators.required],
       id: [{value: order.id, disabled: true}, Validators.required]
     });
-
   }
 
   saveOrder() {

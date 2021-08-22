@@ -2,9 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {ICustomer} from "./../../../shared/interfaces";
 import {CustomerService} from "../../../core/customer.service";
 import {ModalService} from "../../../shared/modal/modal.service";
-import {CustomerModel} from "../../../shared/customer-orders.model";
+import {CustomerModel, OrderModel} from "../../../shared/customer-orders.model";
 import {genderList} from "../../../../common/genderList";
 import {catchError, filter} from "rxjs/operators";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 
 @Component({
@@ -21,13 +22,31 @@ export class CustomersComponent implements OnInit {
   customerModel = new CustomerModel(null);
   genderList = genderList;
   serverError = false;
+  customerAddForm: FormGroup;
 
-  constructor(private customerService: CustomerService, private modalService: ModalService) {
+  constructor(private customerService: CustomerService, private modalService: ModalService, private fb: FormBuilder) {
+    this.buildForm();
   }
 
   ngOnInit() {
     this.customerService.getCustomersSummary()
       .subscribe((data: ICustomer[]) => this.customers = data);
+  }
+
+  buildForm() {
+    this.customerAddForm = this.fb.group({
+      firstName: [null, [
+        Validators.required,
+      ]],
+      lastName: [null, Validators.required],
+      email: [null, [
+        Validators.required,
+        Validators.email,
+      ]],
+      gender: [genderList[0], Validators.required],
+      city: [null, Validators.required],
+      address: [null, Validators.required],
+    });
   }
 
   save(customer: ICustomer | CustomerModel) {
@@ -41,7 +60,7 @@ export class CustomersComponent implements OnInit {
           }
         })
     } else {
-      const data = new CustomerModel(null, customer).toJSON();
+      const data = new CustomerModel(null, this.customerAddForm.value).toJSON();
       this.customerService.addCustomer(data)
         .subscribe(result => {
             this.customers = [...this.customers, result];
