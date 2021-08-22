@@ -1,4 +1,4 @@
-import {async, ComponentFixture, fakeAsync, TestBed} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, TestBed} from '@angular/core/testing';
 
 import {of} from "rxjs";
 import {CustomersModule} from "../../customers.module";
@@ -7,8 +7,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {OrderService} from "../../../core/order.service";
 import {CUSTOMERS} from "../../../../common/customer-data";
 import {DebugElement} from "@angular/core";
-import {By} from "@angular/platform-browser";
 import {CustomerOrdersEditComponent} from "./customer-orders-edit.component";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('CustomerOrdersEditComponent', () => {
   let component: CustomerOrdersEditComponent;
@@ -32,7 +32,8 @@ describe('CustomerOrdersEditComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         CustomersModule,
-        RouterTestingModule
+        RouterTestingModule,
+        HttpClientTestingModule
       ],
       providers: [
         {provide: ActivatedRoute, useValue: activatedRouteMock},
@@ -45,11 +46,12 @@ describe('CustomerOrdersEditComponent', () => {
         component = fixture.componentInstance;
         el = fixture.debugElement;
         orderService = TestBed.inject(OrderService);
-        fixture.detectChanges();
       });
   }));
 
-
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
 });
 

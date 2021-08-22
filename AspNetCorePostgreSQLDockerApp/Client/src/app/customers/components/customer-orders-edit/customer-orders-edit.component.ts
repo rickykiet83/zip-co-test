@@ -22,13 +22,10 @@ export class CustomerOrdersEditComponent implements OnInit {
   statusList = statusList;
   updateOrderSuccess = false;
 
-  constructor(private route: ActivatedRoute, private fb: FormBuilder, private orderService: OrderService) {
-
-  }
+  constructor(private route: ActivatedRoute, private fb: FormBuilder, private orderService: OrderService) {}
 
   ngOnInit(): void {
     this.route.params.pipe(
-      filter(params => !!params),
       tap(params => {
         this.customerId = params['customerId'];
         this.orderId = params['id'];
