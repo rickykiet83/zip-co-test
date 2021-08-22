@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
 namespace AspNetCorePostgreSQLDockerApp
@@ -81,6 +82,7 @@ namespace AspNetCorePostgreSQLDockerApp
             else
                 app.UseExceptionHandler("/Home/Error");
 
+            app.ConfigureExceptionHandler();
             app.UseCors("AllowAllPolicy");
 
             app.UseStaticFiles();
