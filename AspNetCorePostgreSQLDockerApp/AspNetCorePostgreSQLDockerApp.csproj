@@ -31,6 +31,37 @@
 
     <ItemGroup>
       <_ContentIncludedByDefault Remove="Client\cypress\fixtures\example.json" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\3rdpartylicenses.txt" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\favicon.ico" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\glyphicons-halflings-regular.448c34a56d699c29117a.woff2" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\glyphicons-halflings-regular.89889688147bd7575d63.svg" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\glyphicons-halflings-regular.e18bbf611f2a2e43afc0.ttf" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\glyphicons-halflings-regular.f4769f9bdb7466be6508.eot" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\glyphicons-halflings-regular.fa2772327f55d8198301.woff" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\index.html" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\main-es2015.a673ccba089d39719dcb.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\main-es5.a673ccba089d39719dcb.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\polyfills-es2015.ca64e4516afbb1b890d5.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\polyfills-es5.0574b59136d50de45b61.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\runtime-es2015.0811dcefd377500b5b1a.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\runtime-es5.0811dcefd377500b5b1a.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\styles.7fea031784ffd775721e.css" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="wwwroot\dist\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="wwwroot\dist\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="wwwroot\dist\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="wwwroot\dist\**" />
     </ItemGroup>
 
 </Project>
