@@ -36,6 +36,14 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
             public const string CancelOrder = nameof(CancelOrder);
         } 
         
+        /// <summary>
+        /// Gets the list of all orders
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <returns>A newly created company</returns>
+        /// <response code="200">Returns the order list item</response>
+        /// <response code="400">If the item is null</response>
+        /// <returns>The companies list</returns>
         [HttpGet(Name = RouteNames.GetOrders)]
         [ProducesResponseType(typeof(CustomerOrdersDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(CustomerOrdersDto), StatusCodes.Status404NotFound)]

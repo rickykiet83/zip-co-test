@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using AspNetCorePostgreSQLDockerApp.Repository;
@@ -81,6 +82,9 @@ namespace AspNetCorePostgreSQLDockerApp
                 // Add XML comment document by uncommenting the following
                 // var filePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "MyApi.xml");
                 // options.IncludeXmlComments(filePath);
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                options.IncludeXmlComments(xmlPath);
             });
 
             services.AddCors(o => o.AddPolicy("AllowAllPolicy", options =>
