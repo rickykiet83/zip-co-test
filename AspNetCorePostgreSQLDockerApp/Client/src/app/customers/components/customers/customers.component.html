@@ -14,8 +14,19 @@
         <span class="glyphicon glyphicon-pencil"></span> Edit View
       </a>
     </li>
+    <li class="toolbar-item">
+      <a (click)="openModal('customer-modal-add')">
+        <span class="glyphicon glyphicon-plus"></span> Add Customer
+      </a>
+    </li>
   </ul>
 </div>
+
+<jw-modal id="customer-modal-add">
+  <h1>A Custom Modal!</h1>
+  <p>Home page text: <input type="text" [(ngModel)]="customerModel" /></p>
+  <button (click)="closeModal('customer-modal-add');">Close</button>
+</jw-modal>
 
 <div class="row">
   <form class="navbar-form navbar-left" role="search">

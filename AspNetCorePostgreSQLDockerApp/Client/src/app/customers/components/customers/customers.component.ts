@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ICustomer} from "./../../../shared/interfaces";
 import {CustomerService} from "../../../core/customer.service";
+import {ModalService} from "../../../shared/modal/modal.service";
+import {CustomerModel} from "../../../shared/customer-orders.model";
 
 
 @Component({
@@ -9,14 +11,14 @@ import {CustomerService} from "../../../core/customer.service";
   templateUrl: 'customers.component.html'
 })
 export class CustomersComponent implements OnInit {
-
   customers: ICustomer[] = [];
   editId: number = 0;
   errorMessage: string;
   editViewEnabled = false;
   keyword = '';
+  customerModel = new CustomerModel(null);
 
-  constructor(private customerService: CustomerService) {
+  constructor(private customerService: CustomerService, private modalService: ModalService) {
   }
 
   ngOnInit() {
@@ -33,6 +35,14 @@ export class CustomersComponent implements OnInit {
           this.errorMessage = 'Unable to save customer';
         }
       })
+  }
+
+  openModal(id: string) {
+    this.modalService.open(id);
+  }
+
+  closeModal(id: string) {
+    this.modalService.close(id);
   }
 
   onKeywordChange(keyword: string) {
