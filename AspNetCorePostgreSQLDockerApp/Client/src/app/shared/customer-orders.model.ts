@@ -1,4 +1,5 @@
 import {ICustomer, ICustomerOrders, IOrder, IState} from "./interfaces";
+import {genderList} from "../../common/genderList";
 
 export class CustomerOrdersModel implements ICustomerOrders {
   customer: Partial<ICustomer> = null;
@@ -23,31 +24,47 @@ export class CustomerOrdersModel implements ICustomerOrders {
 }
 
 export class CustomerModel implements ICustomer {
-  address: string;
-  city: string;
-  email: string;
-  firstName: string;
-  gender: string;
-  lastName: string;
-  latitude: number;
-  longitude: number;
+  address: string = '';
+  city: string = '';
+  email: string = '';
+  firstName: string = '';
+  gender: string = genderList[0];
+  lastName: string = '';
+  latitude: number = 0;
+  longitude: number = 0;
   state: IState;
-  zip: number;
+  zip: number = 0;
   constructor(public id: number, data?: Partial<ICustomer>) {
     this.address = data?.address || '';
     this.city = data?.city || '';
     this.email = data?.email || '';
-    this.gender = data?.gender || '';
+    this.gender = data?.gender || genderList[0];
     this.firstName = data?.firstName || '';
     this.lastName = data?.lastName || '';
     this.latitude = data?.latitude || 0;
     this.longitude = data?.longitude || 0;
     this.state = data?.state || null;
-    this.zip = data?.zip || null;
+    this.zip = data?.zip || 0;
   }
 
   get fullName(): string {
     return this.firstName + ' ' + this.lastName;
+  }
+
+  toJSON(): ICustomer {
+    return {
+      id: this.id,
+      email: this.email,
+      firstName: this.firstName,
+      lastName: this.lastName,
+      latitude: this.latitude,
+      longitude: this.longitude,
+      address: this.address,
+      city: this.city,
+      state: this.state,
+      zip: this.zip,
+      gender: this.gender,
+    }
   }
 }
 

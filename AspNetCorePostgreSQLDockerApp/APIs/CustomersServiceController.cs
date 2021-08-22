@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using AspNetCorePostgreSQLDockerApp.Dtos;
+using AspNetCorePostgreSQLDockerApp.Helpers;
 using AspNetCorePostgreSQLDockerApp.Models;
 using AspNetCorePostgreSQLDockerApp.Repository;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,10 +16,12 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
     public class CustomersServiceController : ControllerBase
     {
         private readonly ICustomersRepository _repo;
+        private readonly IMapper _mapper;
 
-        public CustomersServiceController(ICustomersRepository repo)
+        public CustomersServiceController(ICustomersRepository repo, IMapper mapper)
         {
             _repo = repo;
+            _mapper = mapper;
         }
 
         // GET api/CustomersService/customers
@@ -55,11 +61,20 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
 
         // POST api/CustomersService/customers
         [HttpPost]
-        [ProducesResponseType(typeof(Customer), 201)]
+        [ApiValidationFilter]
+        [ProducesResponseType(typeof(CustomerDto), 201)]
         [ProducesResponseType(typeof(string), 400)]
-        public async Task<ActionResult> PostCustomer([FromBody] Customer customer)
+        public async Task<IActionResult> PostCustomer([FromBody] CustomerCreateDto customerDto)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var existedEmail = _repo.FindByCondition(x => x.Email.Equals(customerDto.Email))
+                .SingleOrDefault()
+                ?.Email;
+            if (existedEmail != null)
+            {
+               return BadRequest(new ApiBadRequestResponse("Email existed"));
+            }
+            
+            var customer = _mapper.Map<Customer>(customerDto);
 
             var newCustomer = await _repo.InsertCustomerAsync(customer);
             if (newCustomer == null) return BadRequest("Unable to insert customer");

@@ -23,9 +23,56 @@
 </div>
 
 <jw-modal id="customer-modal-add">
-  <h1>A Custom Modal!</h1>
-  <p>Home page text: <input type="text" [(ngModel)]="customerModel" /></p>
-  <button (click)="closeModal('customer-modal-add');">Close</button>
+  <h1>Add new customer</h1>
+  <div>
+    <form #customerForm="ngForm" (ngSubmit)="save(customerModel)">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="name">First Name</label>
+            <input #firstName="ngModel" [(ngModel)]="customerModel.firstName" class="form-control" name="firstName" required
+                   type="text">
+            <div [hidden]="firstName.valid" class="alert alert-danger">First Name is required</div>
+          </div>
+          <div class="form-group">
+            <label for="name">Last Name</label>
+            <input #lastName="ngModel" [(ngModel)]="customerModel.lastName" class="form-control" name="lastName" required
+                   type="text">
+            <div [hidden]="lastName.valid" class="alert alert-danger">Last Name is required</div>
+          </div>
+          <div class="form-group">
+            <label for="name">Email</label>
+            <input #email="ngModel" [(ngModel)]="customerModel.email" class="form-control" name="email" required type="text">
+            <div [hidden]="email.valid" class="alert alert-danger">Email is required</div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="name">City</label>
+            <input #city="ngModel" [(ngModel)]="customerModel.city" class="form-control" name="city" required type="text">
+            <div [hidden]="city.valid" class="alert alert-danger">City is required</div>
+          </div>
+          <div class="form-group">
+            <label for="name">Address</label>
+            <input #address="ngModel" [(ngModel)]="customerModel.address" class="form-control" name="address" required
+                   type="text">
+            <div [hidden]="address.valid" class="alert alert-danger">Address is required</div>
+          </div>
+        </div>
+      </div>
+
+      <button [disabled]="!customerForm.valid" class="btn btn-success" type="submit">Submit</button>&nbsp;
+      <span (click)="closeModal('customer-modal-add');" class="btn btn-default" type="button">Cancel</span>
+    </form>
+  </div>
+  <div class="row alert-container" *ngIf="serverError">
+    <div class="alert alert-danger alert-dismissible" role="alert">
+      <button (click)="serverError = false" type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+        aria-hidden="true">&times;</span></button>
+      <strong>Error!</strong>
+      <p>{{errorMessage}}</p>
+    </div>
+  </div>
 </jw-modal>
 
 <div class="row">

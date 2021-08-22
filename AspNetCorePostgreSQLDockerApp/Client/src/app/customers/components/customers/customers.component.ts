@@ -3,6 +3,8 @@ import {ICustomer} from "./../../../shared/interfaces";
 import {CustomerService} from "../../../core/customer.service";
 import {ModalService} from "../../../shared/modal/modal.service";
 import {CustomerModel} from "../../../shared/customer-orders.model";
+import {genderList} from "../../../../common/genderList";
+import {catchError, filter} from "rxjs/operators";
 
 
 @Component({
@@ -17,6 +19,8 @@ export class CustomersComponent implements OnInit {
   editViewEnabled = false;
   keyword = '';
   customerModel = new CustomerModel(null);
+  genderList = genderList;
+  serverError = false;
 
   constructor(private customerService: CustomerService, private modalService: ModalService) {
   }
@@ -26,15 +30,33 @@ export class CustomersComponent implements OnInit {
       .subscribe((data: ICustomer[]) => this.customers = data);
   }
 
-  save(customer: ICustomer) {
-    this.customerService.updateCustomer(customer)
-      .subscribe((status: boolean) => {
-        if (status) {
-          this.editId = 0;
-        } else {
-          this.errorMessage = 'Unable to save customer';
-        }
-      })
+  save(customer: ICustomer | CustomerModel) {
+    if (customer.id !== null) {
+      this.customerService.updateCustomer(customer)
+        .subscribe((status: boolean) => {
+          if (status) {
+            this.editId = 0;
+          } else {
+            this.errorMessage = 'Unable to save customer';
+          }
+        })
+    } else {
+      const data = new CustomerModel(null, customer).toJSON();
+      this.customerService.addCustomer(data)
+        .pipe(
+          filter(result => !!result),
+        )
+        .subscribe(result => {
+            this.customers = [...this.customers, result];
+            this.closeModal('customer-modal-add');
+          },
+          error => {
+            this.serverError = true;
+            this.errorMessage = error.error.message;
+          }
+        );
+    }
+
   }
 
   openModal(id: string) {

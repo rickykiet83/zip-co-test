@@ -47,6 +47,13 @@ export class CustomerService {
       );
   }
 
+  addCustomer(customer: ICustomer): Observable<ICustomer> {
+    return this.http.post<ICustomer>(this.url, customer)
+      .pipe(
+        catchError(this.handleError),
+      );
+  }
+
   handleError(error: any) {
     console.error(error);
     return throwError(error || 'Server error');
