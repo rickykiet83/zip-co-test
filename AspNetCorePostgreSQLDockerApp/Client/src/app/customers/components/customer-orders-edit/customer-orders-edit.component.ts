@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {OrderService} from "../../../core/order.service";
 import {OrderModel} from "../../../shared/customer-orders.model";
-import {filter, tap} from "rxjs/operators";
+import {filter, switchMap, take, tap} from "rxjs/operators";
 import {statusList} from "../../../../common/statusList";
 import {IOrder} from "../../../shared/interfaces";
 
@@ -23,18 +23,29 @@ export class CustomerOrdersEditComponent implements OnInit {
   updateOrderSuccess = false;
 
   constructor(private route: ActivatedRoute, private router: Router, private fb: FormBuilder, private orderService: OrderService) {
-    this.route.params.subscribe(params => {
-      this.customerId = params['customerId'];
-      this.orderId = params['id'];
-    });
+    this.route.params.pipe(
+      tap(params => {
+        this.customerId = params['customerId'];
+        this.orderId = params['id'];
+      }),
+      switchMap(params => [
+        this.getOrder()
+      ])
+    ).subscribe();
   }
 
-  ngOnInit(): void {
-    this.orderService.getOrder(this.customerId, this.orderId)
-      .pipe(
-        tap((order) => this.buildForm(order))
-      )
-      .subscribe(order => this.orderModel = order);
+  ngOnInit(): void {}
+
+  getOrder() {
+    if (this.customerId && this.orderId)
+      this.orderService.getOrder(this.customerId, this.orderId)
+        .pipe(
+          tap((order) => this.buildForm(order))
+        )
+        .subscribe(order => this.orderModel = order, error => {
+          this.serverError = true;
+          this.errorMessages = error.message
+        });
   }
 
   buildForm(order: OrderModel) {
