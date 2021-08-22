@@ -87,6 +87,9 @@
     <button id="btn-search" (click)="onSearchByKeyword()" type="button" class="btn btn-default btn-search">Search</button>
   </form>
 </div>
+<div class="row">
+  <h3>Total: {{ totalCustomer }}</h3>
+</div>
 
 <div *ngIf="!editViewEnabled">
   <div class="row header-row">

@@ -35,5 +35,4 @@ export class CustomerOrdersComponent implements OnInit {
   sortOrders(orders: OrderModel[] | IOrder[]): OrderModel[] {
     return this.customerOrders.orders = _.sortBy(orders, ['id']);
   }
-
 }

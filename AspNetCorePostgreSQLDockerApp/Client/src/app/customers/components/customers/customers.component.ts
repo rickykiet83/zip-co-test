@@ -74,4 +74,8 @@ export class CustomersComponent implements OnInit {
       .subscribe((data: ICustomer[]) => this.customers = data);
   }
 
+  get totalCustomer(): number {
+    return this.customers.length;
+  }
+
 }
