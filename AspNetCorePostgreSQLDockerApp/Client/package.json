@@ -8,11 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "build:prod": "ng build --configuration production",
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run",
-    "start:prod": "http-server ./../wwwroot/dist -p 4200",
-    "build-and-deploy:prod": "npm-run-all build:prod start:prod",
-    "e2e": "start-server-and-test build-and-deploy:prod http://localhost:4200 cypress:run"
+    "e2e:open": "cypress open",
+    "e2e": "cypress run"
   },
   "private": true,
   "dependencies": {
