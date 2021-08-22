@@ -55,7 +55,7 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
 
         public async Task<Order> GetOrderAsync(int orderId, bool trackChange = false)
         {
-            return await FindByIdAsync(orderId, x => x.Customer);
+            return await FindByIdAsync(trackChange, orderId, x => x.Customer);
         }
 
         public Order UpdateOrder(Order order)

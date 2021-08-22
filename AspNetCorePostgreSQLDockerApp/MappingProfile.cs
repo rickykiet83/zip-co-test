@@ -14,6 +14,9 @@ namespace AspNetCorePostgreSQLDockerApp
             CreateMap<Order, OrderDetailDto>();
             CreateMap<Customer, CustomerDto>();
             CreateMap<CustomerCreateDto, Customer>().ReverseMap();
+            CreateMap<CustomerUpdateDto, Customer>()
+                .ForMember(dest => dest.Email, opt => opt.UseDestinationValue())
+                .ReverseMap();
             CreateMap<Customer, CustomerOrdersDto>()
                 .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src))
                 .ForMember(dest => dest.Orders, opt => opt.MapFrom(src => src.Orders));

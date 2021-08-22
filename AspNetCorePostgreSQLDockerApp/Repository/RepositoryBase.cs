@@ -47,9 +47,9 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
 
         }
 
-        public async Task<T> FindByIdAsync(K id, params Expression<Func<T, object>>[] includeProperties)
+        public async Task<T> FindByIdAsync(bool trackChange, K id, params Expression<Func<T, object>>[] includeProperties)
         {
-            return await FindAll(false, includeProperties).SingleAsync(x => x.Id.Equals(id));
+            return await FindByCondition(x => x.Id.Equals(id), trackChange).SingleOrDefaultAsync();
         }
 
         public void Create(T entity) => _dbContext.Set<T>().Add(entity);

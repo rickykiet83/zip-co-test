@@ -28,12 +28,12 @@ namespace AspNetCorePostgreSQLDockerApp.Repository
 
         public async Task<Customer> GetCustomerAsync(int id, bool trackChanges = false)
         {
-            return await FindByIdAsync(id);
+            return await FindByIdAsync(trackChanges, id);
         }
 
         public Task<Customer> GetCustomerOrdersAsync(int id, bool trackChanges = false)
         {
-            return FindByIdAsync(id, x => x.Orders);
+            return FindByIdAsync(trackChanges, id, x => x.Orders);
         }
 
         public async Task<List<State>> GetStatesAsync(bool trackChanges = false)

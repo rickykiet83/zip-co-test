@@ -40,13 +40,13 @@ namespace AspNetCorePostgreSQLDockerApp.Services
 
         public async Task<TDto> GetByIdAsync(K id)
         {
-            var entity = await _repository.FindByIdAsync(id);
+            var entity = await _repository.FindByIdAsync(false, id);
             return _mapper.Map<TDto>(entity);
         }
 
         public async Task<TDto> DeleteAsync(K id)
         {
-            var entity = await _repository.FindByIdAsync(id);
+            var entity = await _repository.FindByIdAsync(false, id);
             if (entity == null) throw new NullReferenceException();
             _repository.Delete(entity);
             return _mapper.Map<TDto>(entity);
