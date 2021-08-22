@@ -9,7 +9,7 @@ namespace AspNetCorePostgreSQLDockerApp.Test.Factories
 {
     public static class OrderFactory
     {
-        public static readonly Faker<Order> Order = new Faker<Order>()
+        public static Faker<Order> Order = new Faker<Order>()
             .StrictMode(true)
             .RuleFor(o => o.Id, 0)
             .RuleFor(o => o.Price, f => f.Random.Decimal(1, Decimal.MaxValue))
