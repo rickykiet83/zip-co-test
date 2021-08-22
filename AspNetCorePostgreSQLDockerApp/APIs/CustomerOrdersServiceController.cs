@@ -68,7 +68,7 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
         [ProducesResponseType(typeof(List<OrderDto>), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> CreateOrders([Required] int customerId, [FromBody]CustomerCreateOrdersDto ordersDto)
         {
-            var customer = await _orderService.GetCustomerAsync(customerId);
+            var customer = await _orderService.GetCustomerAsync(customerId, false);
             if (customer == null)
             {
                 _logger.LogInformation($"Customer with orderId: {customer} doesn't exist in the database.");
@@ -87,7 +87,7 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
         [ProducesResponseType(typeof(OrderDto), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> UpdateOrder([Required] int customerId, [Required] int orderId, [FromBody]OrderForUpdateDto orderDto)
         {
-            var customer = await _orderService.GetCustomerAsync(customerId);
+            var customer = await _orderService.GetCustomerAsync(customerId, false);
             if (customer == null)
             {
                 _logger.LogInformation($"Customer with customerId: {customer.Id} doesn't exist in the database.");

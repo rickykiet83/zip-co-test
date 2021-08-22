@@ -89,16 +89,7 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
         [ProducesResponseType(typeof(bool), 400)]
         public async Task<ActionResult> PutCustomer(int id, [FromBody] CustomerUpdateDto customerDto)
         {
-            var customer = await _repo.GetCustomerAsync(customerDto.Id, false);
-            if (customer == null)
-            {
-                return BadRequest("Customer not existed in Database");
-            }
-
             var updateCustomer = _mapper.Map<Customer>(customerDto);
-            // override Email
-            updateCustomer.Email = customer.Email;
-            
             var status = await _repo.UpdateCustomerAsync(updateCustomer);
             if (!status) return BadRequest("Unable to update customer");
 
