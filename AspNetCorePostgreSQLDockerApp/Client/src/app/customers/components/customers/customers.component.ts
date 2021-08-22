@@ -43,12 +43,10 @@ export class CustomersComponent implements OnInit {
     } else {
       const data = new CustomerModel(null, customer).toJSON();
       this.customerService.addCustomer(data)
-        .pipe(
-          filter(result => !!result),
-        )
         .subscribe(result => {
             this.customers = [...this.customers, result];
             this.closeModal('customer-modal-add');
+            this.serverError = false;
           },
           error => {
             this.serverError = true;

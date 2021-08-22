@@ -67,7 +67,7 @@ namespace AspNetCorePostgreSQLDockerApp.Apis
         public async Task<IActionResult> PostCustomer([FromBody] CustomerCreateDto customerDto)
         {
             var existedEmail = _repo.FindByCondition(x => x.Email.Equals(customerDto.Email))
-                .SingleOrDefault()
+                .FirstOrDefault()
                 ?.Email;
             if (existedEmail != null)
             {
