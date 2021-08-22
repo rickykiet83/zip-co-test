@@ -58,10 +58,13 @@ export class CustomersComponent implements OnInit {
   }
 
   openModal(id: string) {
+    this.customerModel = new CustomerModel(null);
     this.modalService.open(id);
   }
 
   closeModal(id: string) {
+    this.serverError = false;
+    this.errorMessage = '';
     this.modalService.close(id);
   }
 
