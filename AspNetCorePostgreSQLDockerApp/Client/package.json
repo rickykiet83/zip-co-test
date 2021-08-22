@@ -7,9 +7,9 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
+    "build:prod": "ng build --configuration production",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run",
-    "e2e": "start-server-and-test build-and-deploy:prod http://localhost:5000 cypress:run"
+    "cypress:run": "cypress run"
   },
   "private": true,
   "dependencies": {
@@ -23,6 +23,7 @@
     "@angular/router": "~9.0.6",
     "bootstrap": "^3.3.7",
     "core-js": "^2.5.4",
+    "http-server": "^13.0.1",
     "lodash": "^4.17.21",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
@@ -47,6 +48,7 @@
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.0",
     "protractor": "~5.4.0",
+    "start-server-and-test": "^1.13.1",
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
     "typescript": "~3.7.5"

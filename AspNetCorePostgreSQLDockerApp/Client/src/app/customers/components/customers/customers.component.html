@@ -15,7 +15,7 @@
       </a>
     </li>
     <li class="toolbar-item">
-      <a (click)="openModal('customer-modal-add')">
+      <a id="add-customer-link" (click)="openModal('customer-modal-add')">
         <span class="glyphicon glyphicon-plus"></span> Add Customer
       </a>
     </li>
@@ -62,7 +62,7 @@
       </div>
 
       <button [disabled]="!customerForm.valid" class="btn btn-success" type="submit">Submit</button>&nbsp;
-      <span (click)="closeModal('customer-modal-add');" class="btn btn-default" type="button">Cancel</span>
+      <span id="btn-close-modal" (click)="closeModal('customer-modal-add');" class="btn btn-default" type="button">Cancel</span>
     </form>
   </div>
   <div class="row alert-container" *ngIf="serverError">
@@ -124,7 +124,7 @@
     </div>
     <div class="col-md-3">
       <div class="btn-group pull-right">
-        <a href="customers/{{customer?.id}}/orders" type="button" class="btn btn-secondary">View Orders</a>
+        <a href="customers/{{customer?.id}}/orders" type="button" class="btn btn-secondary btn-view-orders">View Orders</a>
         <a [routerLink]="['/customers/' + customer?.id + '/orders/add']"  type="button" class="btn btn-secondary">Add Orders</a>
       </div>
     </div>

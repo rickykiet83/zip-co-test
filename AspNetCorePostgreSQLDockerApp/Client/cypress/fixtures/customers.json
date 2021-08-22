@@ -9,7 +9,43 @@
     "zip": 85237,
     "gender": "Female",
     "orderCount": 0,
-    "orders": null,
+    "orders": [
+      {
+        "id": 145,
+        "product": "Lamp2",
+        "quantity": 1,
+        "price": 89.99,
+        "status": "Cancelled"
+      },
+      {
+        "id": 146,
+        "product": "Table",
+        "quantity": 1,
+        "price": 329.99,
+        "status": "Cancelled"
+      },
+      {
+        "id": 162,
+        "product": "Speakers",
+        "quantity": 1,
+        "price": 499.99,
+        "status": "Delivered"
+      },
+      {
+        "id": 163,
+        "product": "iPod",
+        "quantity": 1,
+        "price": 399.99,
+        "status": "InProgress"
+      },
+      {
+        "id": 164,
+        "product": "Chair",
+        "quantity": 1,
+        "price": 129.99,
+        "status": "InProgress"
+      }
+    ],
     "id": 15
   },
   {
