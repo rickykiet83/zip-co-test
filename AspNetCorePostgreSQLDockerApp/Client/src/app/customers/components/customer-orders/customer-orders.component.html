@@ -50,7 +50,7 @@
     <td>
       <div class="btn-group">
         <a [routerLink]="['/customers/' + customerOrders.customer?.id + '/orders/' + order.id +'/edit']" type="button" class="btn btn-secondary">Edit Order</a>
-        <a (click)="onCancelOrder(order.id)" type="button" class="btn btn-secondary">Cancel Order</a>
+        <a [class.disabled]="order.status === 'Cancelled'" (click)="onCancelOrder(order.id)" type="button" class="btn btn-secondary">Cancel Order</a>
       </div>
     </td>
   </tr>
