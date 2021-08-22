@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using AspNetCorePostgreSQLDockerApp.Extensions;
 using AspNetCorePostgreSQLDockerApp.Repository;
 using AspNetCorePostgreSQLDockerApp.Validations;
 using Microsoft.AspNetCore.Builder;
@@ -33,26 +34,12 @@ namespace AspNetCorePostgreSQLDockerApp
         public void ConfigureServices(IServiceCollection services)
         {
             //Add PostgreSQL support
-            services.AddEntityFrameworkNpgsql()
-                .AddDbContext<DockerCommandsDbContext>(options =>
-                    options.UseNpgsql(Configuration["Data:DbContext:DockerCommandsConnectionString"]))
-                .AddDbContext<CustomersDbContext>(options =>
-                    options.UseNpgsql(Configuration["Data:DbContext:CustomersConnectionString"])
-                        .EnableSensitiveDataLogging()
-                        .EnableDetailedErrors());
+            services.ConfigureSqlContext(Configuration);
 
             services.AddAutoMapper(typeof(Startup));
 
             services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
-            services.AddControllersWithViews()
-                .AddFluentValidation(fv =>
-                    fv.RegisterValidatorsFromAssemblyContaining<OrderCreateValidator>())
-                .AddJsonOptions(opts =>
-                {
-                    var enumConverter = new JsonStringEnumConverter();
-                    opts.JsonSerializerOptions.Converters.Add(enumConverter);
-                })
-                ;
+            services.ConfigureControllersWithView();
 
             // Add our PostgreSQL Repositories (scoped to each request)
             // services.AddScoped<IDockerCommandsRepository, DockerCommandsRepository>();
@@ -62,37 +49,9 @@ namespace AspNetCorePostgreSQLDockerApp
             services.AddTransient<DockerCommandsDbSeeder>();
             services.AddTransient<CustomersDbSeeder>();
 
-            services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Version = "v1",
-                    Title = "Application API",
-                    Description = "Application Documentation",
-                    Contact = new OpenApiContact
-                    {
-                        Name = "Kiet Pham", 
-                        Email = "kietpham.dev@gmail.com", 
-                        Url = new Uri("https://www.linkedin.com/in/kiet-pham-a1260b77/")
-                    },
-                    License = new OpenApiLicense
-                        { Name = "MIT", Url = new Uri("https://en.wikipedia.org/wiki/MIT_License") }
-                });
+            services.ConfigureSwagger();
 
-                // Add XML comment document by uncommenting the following
-                // var filePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "MyApi.xml");
-                // options.IncludeXmlComments(filePath);
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                options.IncludeXmlComments(xmlPath);
-            });
-
-            services.AddCors(o => o.AddPolicy("AllowAllPolicy", options =>
-            {
-                options.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-            }));
+            services.ConfigureCors();
 
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "Client/dist"; });
 
